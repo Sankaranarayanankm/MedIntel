@@ -23,48 +23,55 @@ import PatientServices from "./pages/patient/PatientServices";
 import PatientDoctorDetails from "./pages/patient/PatientDoctorDetails";
 import PatientDoctors from "./pages/patient/PatientDoctors";
 import PatientServiceDetails from "./pages/patient/PatientServiceDetails";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route path="/signup" element={<PatientSignup />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/patient">
-          <Route path="login" element={<PatientLogin />} />
-          <Route path="signup" element={<PatientSignup />} />
-          <Route path="doctors" element={<PatientDoctors />} />
-          <Route path="doctors/:doctorId" element={<PatientDoctorDetails />} />
-          <Route path="services" element={<PatientServices />} />
-          <Route
-            path="services/:serviceId"
-            element={<PatientServiceDetails />}
-          />
-          <Route path="appointments" element={<PatientAppointments />} />
+    <>
+      <Toaster />
+      <Routes>
+        <Route element={<AppLayout />}>  
+          <Route path="/signup" element={<PatientSignup />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/patient">
+            <Route path="login" element={<PatientLogin />} />
+            <Route path="signup" element={<PatientSignup />} />
+            <Route path="doctors" element={<PatientDoctors />} />
+            <Route
+              path="doctors/:doctorId"
+              element={<PatientDoctorDetails />}
+            />
+            <Route path="services" element={<PatientServices />} />
+            <Route
+              path="services/:serviceId"
+              element={<PatientServiceDetails />}
+            />
+            <Route path="appointments" element={<PatientAppointments />} />
+          </Route>
+          <Route path="/doctor">
+            <Route path="login" element={<DoctorLogin />} />
+            <Route path="" element={<DoctorDashboard />} />
+            <Route path="appointments" element={<DoctorAppointments />} />
+            <Route path="profile" element={<DoctorProfile />} />
+          </Route>
+          <Route path="/admin">
+            <Route path="" element={<AdminDashboard />} />
+            <Route path="login" element={<AdminLogin />} />
+            <Route path="doctors" element={<ListDoctor />} />
+            <Route path="add-doctor" element={<AddDoctor />} />
+            <Route path="appointments" element={<Appointments />} />
+            <Route path="service-dashboard" element={<ServiceDashboard />} />
+            <Route path="add-service" element={<AddService />} />
+            <Route path="services" element={<ListServices />} />
+            <Route
+              path="service-appointments"
+              element={<ServiceAppointments />}
+            />
+          </Route>
         </Route>
-        <Route path="/doctor">
-          <Route path="login" element={<DoctorLogin />} />
-          <Route path="" element={<DoctorDashboard />} />
-          <Route path="appointments" element={<DoctorAppointments />} />
-          <Route path="profile" element={<DoctorProfile />} />
-        </Route>
-        <Route path="/admin">
-          <Route path="" element={<AdminDashboard />} />
-          <Route path="login" element={<AdminLogin />} />
-          <Route path="doctors" element={<ListDoctor />} />
-          <Route path="add-doctor" element={<AddDoctor />} />
-          <Route path="appointments" element={<Appointments />} />
-          <Route path="service-dashboard" element={<ServiceDashboard />} />
-          <Route path="add-service" element={<AddService />} />
-          <Route path="services" element={<ListServices />} />
-          <Route
-            path="service-appointments"
-            element={<ServiceAppointments />}
-          />
-        </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 };
 

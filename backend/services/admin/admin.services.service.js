@@ -7,8 +7,6 @@ import CustomError from "../../utls/customError.js";
 //   //  i need to find revenue of each service here
 //   return services;
 // };
-import Service from "../models/service.model.js";
-import ServiceBooking from "../models/serviceBooking.model.js";
 
 export const getallservicesService = async () => {
   const services = await Service.find().lean();

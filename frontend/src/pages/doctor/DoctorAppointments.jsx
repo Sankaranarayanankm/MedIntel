@@ -7,7 +7,7 @@ const DoctorAppointments = () => {
   const [status, setStatus] = useState("all");
   const [search, setSearch] = useState("");
   const [filteredSearch, setFilteredSearch] = useState(DUMMY_APPOINTMENTS);
-
+   
   useEffect(() => {
     let data = DUMMY_APPOINTMENTS;
 

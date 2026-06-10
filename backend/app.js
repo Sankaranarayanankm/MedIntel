@@ -6,9 +6,16 @@ import authRouter from "./router/auth/auth.routes.js";
 import paymentRouter from "./router/webhook.route.js";
 import rateLimit from "express-rate-limit";
 import { connect } from "./db/db.js";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 
 const limiter = rateLimit({
   max: 20, // sets max req per window

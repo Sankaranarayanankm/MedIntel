@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, Phone, User, Eye, EyeOff } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
+import { toast } from "react-hot-toast";
 
 const PatientSignup = () => {
   const [input, setInput] = useState({
@@ -34,9 +37,28 @@ const PatientSignup = () => {
       };
     });
   };
+  const { mutate: signup, isPending } = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.post("auth/patient-signup", data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      toast.success("Signed in successfully");
+      const serializedUser = JSON.stringify(data);
+      localStorage.setItem("user", serializedUser);
+    },
+    onError: (error) => toast.error(err.message || "Failed to Sign-in"),
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (input.password !== input.confirm) {
+      toast.error("passwords are not matching");
+      return;
+    }
     console.log(input);
+    signup(input);
+
     reset();
   };
   return (
@@ -52,7 +74,6 @@ const PatientSignup = () => {
             Create your patient account to book appointments, access medical
             services, manage prescriptions, and connect with trusted doctors.
           </p>
-
           <div className="mt-10 space-y-4">
             <div className="bg-white/10 rounded-xl p-4">
               ✓ Easy Appointment Booking
@@ -246,7 +267,7 @@ const PatientSignup = () => {
               onClick={handleSubmit}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
             >
-              Create Account
+              {isPending ? "Please Wait" : "Create Account"}
             </button>
           </form>
 

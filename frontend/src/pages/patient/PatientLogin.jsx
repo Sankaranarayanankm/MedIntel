@@ -1,16 +1,39 @@
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import axiosInstance from "../../utls/axios";
 
 const PatientLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [togglePassword, setTogglePassword] = useState(false);
+
+  const { mutate: login, isPending } = useMutation({
+    mutationFn: async (data) => {
+      console.log(data, "this is the data");
+      const response = await axiosInstance.post("/auth/patient-login", data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      toast.success("Logged in successfully");
+      const user = data;
+      const serializedUser = JSON.stringify(user);
+      localStorage.setItem("user", serializedUser);
+    },
+    onError: (err) => {
+      console.log(err.response);
+      toast.error(err.response?.data?.message || "Failed to login");
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
+    const obj = { email, password };
+    login(obj);
   };
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-5 py-10">
       <div className="w-full max-w-6xl bg-white rounded-3xl shadow-lg overflow-hidden grid lg:grid-cols-2">
@@ -101,7 +124,7 @@ const PatientLogin = () => {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
             >
-              Login
+              {isPending ? "Please Wait" : "Login"}
             </button>
           </form>
 

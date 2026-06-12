@@ -10,7 +10,7 @@ import {
 import { FcCancel, FcSearch } from "react-icons/fc";
 import {
   ADMIN_DASHBOARD_SERVICE,
-  ADMIN_DOCTOR_DETAILS,
+  ADMIN_DOCTOR_DETAILS,   
 } from "../../DUMMY/data";
 
 const AdminDashboard = () => {

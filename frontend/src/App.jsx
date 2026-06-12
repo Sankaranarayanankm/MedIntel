@@ -24,15 +24,31 @@ import PatientDoctorDetails from "./pages/patient/PatientDoctorDetails";
 import PatientDoctors from "./pages/patient/PatientDoctors";
 import PatientServiceDetails from "./pages/patient/PatientServiceDetails";
 import { Toaster } from "react-hot-toast";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axiosInstance from "./utls/axios";
+import { useEffect, useState } from "react";
+import { Loader } from "lucide-react";
 
 const App = () => {
+  const queryClient = useQueryClient();
+  const { data: user, isLoading } = useQuery({
+    queryKey: ["authUser"],
+    queryFn: () => {
+      const localData = localStorage.getItem("user");
+      return localData ? JSON.parse(localData) : null;
+    },
+  });
+  const role = user?.role || "";
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <>
       <Toaster />
       <Routes>
-        <Route element={<AppLayout />}>  
+        <Route element={<AppLayout />}>
           <Route path="/signup" element={<PatientSignup />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/patient">
             <Route path="login" element={<PatientLogin />} />

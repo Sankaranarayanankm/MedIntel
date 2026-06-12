@@ -2,7 +2,7 @@ import { Save, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { BiSave } from "react-icons/bi";
 import { useLocation } from "react-router-dom";
-
+    
 const AddService = () => {
   const [instructions, setInstructions] = useState([]);
   const [scheduleSlots, setScheduleSlots] = useState([]);

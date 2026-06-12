@@ -1,42 +1,53 @@
+import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
+import axiosInstance from "../../utls/axios";
+import toast from "react-hot-toast";
 
 // change schedule slot from text t0 date -> text text
-const DoctorProfileForm = () => {
+const DoctorProfileForm = (props) => {
   const [input, setInput] = useState({
-    name: "",
-    role: "doctor",
-    image: "",
-    specialization: "",
-    experience: "",
-    doctorEmail: "",
-    password: "",
-    availability: "available",
-    qualification: "",
-    rating: "",
-    successRate: "",
-    about: "",
-    fee: "",
+    name: props.name || "",
+    role: props.role || "doctor",
+    image: props.image || "",
+    specialization: props.specialization || "",
+    experience: props.experience || "",
+    doctorEmail: props.doctorEmail || "",
+    availability: props.availability || "available",
+    qualification: props.qualification || "",
+    rating: props.rating || "",
+    successRate: props.successRate || "",
+    about: props.about || "",
+    fee: props.fee || "",
   });
-
   const [slot, setSlot] = useState("");
-  const [scheduleSlots, setScheduleSlots] = useState([]);
-
+  const [scheduleSlots, setScheduleSlots] = useState(props.scheduleSlots || []);
   const handleInput = (e) => {
     const { name, value } = e.target;
-
     setInput((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
 
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setInput((prev) => ({
+        ...prev,
+        image: reader.result,
+      }));
+    };
+
+    reader.readAsDataURL(file);
+  };
   const addSlot = () => {
     if (!slot.trim()) return;
 
     setScheduleSlots((prev) => [...prev, slot]);
     setSlot("");
   };
-
   const removeSlot = (index) => {
     setScheduleSlots((prev) => prev.filter((_, idx) => idx !== index));
   };
@@ -48,7 +59,7 @@ const DoctorProfileForm = () => {
       ...input,
       scheduleSlots,
     };
-
+    props.updateProfile(doctorData);
     console.log(doctorData);
   };
 
@@ -83,25 +94,20 @@ const DoctorProfileForm = () => {
         </div>
 
         <div>
-          <label className="block mb-2 font-medium">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={input.password}
-            onChange={handleInput}
-            className="w-full border rounded-lg px-4 py-3"
-          />
-        </div>
-
-        <div>
           <label className="block mb-2 font-medium">Image URL</label>
           <input
-            type="text"
+            type="file"
             name="image"
-            value={input.image}
-            onChange={handleInput}
+            onChange={(e) => handleImageChange(e)}
             className="w-full border rounded-lg px-4 py-3"
           />
+          {input.image && (
+            <img
+              src={input.image}
+              alt="preview"
+              className="w-32 h-32 object-cover"
+            />
+          )}
         </div>
 
         <div>

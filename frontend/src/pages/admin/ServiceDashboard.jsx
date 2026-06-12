@@ -6,7 +6,7 @@ import { BsBox, BsCheckCircle, BsXCircle, BsGraphUp } from "react-icons/bs";
 const ServiceDashboard = () => {
   const [search, setSearch] = useState("");
   const [filteredServices, setFilteredServices] = useState(SERVICES);
-
+  
   const serviceItems = ({ icon, text, number, color }) => {
     return (
       <div className="bg-white shadow-md rounded-xl p-4 flex items-center gap-3 hover:shadow-lg transition">
@@ -30,7 +30,7 @@ const ServiceDashboard = () => {
     });
     setFilteredServices(updated);
   };
-
+   
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}

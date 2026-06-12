@@ -17,18 +17,18 @@ app.use(
   }),
 );
 
-const limiter = rateLimit({
-  max: 20, // sets max req per window
-  windowMs: 60 * 60 * 1000, // setting the time for 1 hour,its in ms
-  message: {
-    success: false,
-    message: "recived too many requests from this IP,please try after one hour",
-  },
-});
-app.use("/api/v1", limiter); // applying rate limit on all endpoint starts with /api/v1
+// const limiter = rateLimit({
+//   max: 20, // sets max req per window
+//   windowMs: 60 * 60 * 1000, // setting the time for 1 hour,its in ms
+//   message: {
+//     success: false,
+//     message: "recived too many requests from this IP,please try after one hour",
+//   },
+// });
+// app.use("/api/v1", limiter); // applying rate limit on all endpoint starts with /api/v1
 // this should be used above express.json()
 app.use("/api/v1/webhook", paymentRouter);
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 // routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/patient", patientRouter);

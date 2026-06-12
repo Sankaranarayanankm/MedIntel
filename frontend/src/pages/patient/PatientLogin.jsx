@@ -12,7 +12,6 @@ const PatientLogin = () => {
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (data) => {
-      console.log(data, "this is the data");
       const response = await axiosInstance.post("/auth/patient-login", data);
       return response.data;
     },

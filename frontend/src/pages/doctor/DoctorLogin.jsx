@@ -11,6 +11,7 @@ const DoctorLogin = () => {
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (data) => {
+      console.log(data);
       const response = await axiosInstance.post("/auth/doctor-login", data);
       return response.data;
     },
@@ -28,6 +29,7 @@ const DoctorLogin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const obj = { doctorEmail: email, password };
+    console.log(obj);
     login(obj);
   };
 

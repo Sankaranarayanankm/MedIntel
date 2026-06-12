@@ -2,8 +2,11 @@ import React from "react";
 import PatientAppointmentCard from "../../components/patient/PatientAppointmentCard";
 import PatientServiceCard from "../../components/patient/PatientServiceCard";
 import { PATIENT_APPOINTMENTS, PATIENT_SERVICES } from "../../DUMMY/PATIENT";
+import { useQueryClient } from "@tanstack/react-query";
 
 const PatientAppointments = () => {
+
+ 
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Doctor Appointments */}

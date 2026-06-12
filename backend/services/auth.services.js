@@ -40,7 +40,7 @@ export const patientSignupService = async (
       expiresIn: "7d",
     },
   );
-  const obj = { token, id: patientUser._id };
+  const obj = { token, id: patientUser._id, role: patientUser.role };
   return obj;
 };
 export const patientLoginService = async (email, password) => {
@@ -64,7 +64,7 @@ export const patientLoginService = async (email, password) => {
       expiresIn: "7d",
     },
   );
-  const obj = { token, id: user._id };
+  const obj = { token, id: user._id, role: user.role };
   return obj;
 };
 export const doctorLoginService = async (doctorEmail, password) => {
@@ -90,7 +90,7 @@ export const doctorLoginService = async (doctorEmail, password) => {
       expiresIn: "7d",
     },
   );
-  const obj = { token, id: doctor._id };
+  const obj = { token, id: doctor._id, role: doctor.role };
   return obj;
 };
 export const adminSignupService = async (name, password, email) => {
@@ -115,7 +115,7 @@ export const adminSignupService = async (name, password, email) => {
     process.env.JWT_SECRET,
     { expiresIn: "7d" },
   );
-  const obj = { token, id: adminUser._id };
+  const obj = { token, id: adminUser._id, role: adminUser.role };
   return obj;
 };
 export const adminLoginService = async (email, password) => {
@@ -140,7 +140,6 @@ export const adminLoginService = async (email, password) => {
       expiresIn: "7d",
     },
   );
-  const obj = { token, id: existingUser._id };
+  const obj = { token, id: existingUser._id, role: existingUser.role };
   return obj;
 };
-   

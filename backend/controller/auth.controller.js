@@ -11,7 +11,7 @@ export const patientSignupController = async (req, res, next) => {
     const { name, password, phone, email, gender } = req.body;
     const patientUser = await patientSignupService(
       name,
-      password,  
+      password,
       phone,
       email,
       gender,
@@ -22,6 +22,7 @@ export const patientSignupController = async (req, res, next) => {
       message: "Successfully created account",
       token: patientUser.token,
       id: patientUser.id,
+      role: patientUser.role,
     });
   } catch (err) {
     next(err);
@@ -37,6 +38,7 @@ export const patientLoginController = async (req, res, next) => {
       message: "successfully logged in ",
       token: user.token,
       id: user.id,
+      role: user.role,
     });
   } catch (err) {
     next(err);
@@ -52,6 +54,7 @@ export const doctorLoginController = async (req, res, next) => {
       message: "Login successfull",
       token: doctor.token,
       id: doctor._id,
+      role: doctor.role,
     });
   } catch (err) {
     next(err);
@@ -67,6 +70,7 @@ export const adminSignupcontroller = async (req, res, next) => {
       token: adminUser.token,
       message: "admin user created",
       id: adminUser.id,
+      role: adminUser.role,
     });
   } catch (err) {
     next(err);
@@ -82,6 +86,7 @@ export const adminLogincontroller = async (req, res, next) => {
       token: existingUser.token,
       message: "login successful",
       id: existingUser.id,
+      role: existingUser.role,
     });
   } catch (err) {
     next(err);

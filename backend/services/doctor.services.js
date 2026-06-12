@@ -1,11 +1,14 @@
 import Appoinment from "../models/appoinments.model.js";
 import Doctor from "../models/doctor.model.js";
 import CustomError from "../utls/customError.js";
+import cloudinary from "../utls/cloudinary.js";
 
 export const getAllDoctorAppointmentService = async (doctorId) => {
   const doctorAppoinments = await Appoinment.find({
     doctor: doctorId,
-  }).lean();
+  })
+    .lean()
+    .populate("patient", "name gender age phone");
   return doctorAppoinments;
 };
 export const updateDoctorAppointmentService = async (
@@ -52,13 +55,30 @@ export const getDoctorDetailsService = async (doctorId) => {
   const cancelled = doctorAppointments.filter(
     (appointment) => appointment.status == "cancelled",
   ).length;
-  return { ...doctor.toObject(), totalEarnings, completed, cancelled };
+  return {
+    ...doctor,
+    totalEarnings,
+    completed,
+    cancelled,
+    totalAppointments: doctorAppointments.length,
+  };
 };
 export const editDoctorDetailsService = async (doctorId, data) => {
-  const doctor = await Doctor.findByIdAndUpdate(doctorId, data, {
-    returnDocument: "after",
-    runValidators: true,
-  });
+  if (data.image) {
+    const uploadResponse = await cloudinary.uploader.upload(data.image, {
+      folder: "doctors",
+    });
+    data.image = uploadResponse.secure_url;
+  }
+  console.log(data.image);
+  const doctor = await Doctor.findByIdAndUpdate(
+    doctorId,
+    { $set: data },
+    {
+      returnDocument: "after",
+      runValidators: true,
+    },
+  );
   if (!doctor) {
     throw new CustomError("doctor not found", 404);
   }

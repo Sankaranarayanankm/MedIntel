@@ -26,7 +26,7 @@ const Appointments = () => {
           <h4 className="text-2xl font-bold text-gray-800">Appointments</h4>
           <p className="text-gray-500 text-sm mt-1">
             Manage and search upcoming patient appointments
-          </p>
+          </p>   
         </div>
 
         {/* Search */}

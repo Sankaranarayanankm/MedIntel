@@ -6,13 +6,11 @@ import { FcBusiness } from "react-icons/fc";
 import { BiCross } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import DoctorAppointmentCard from "../../components/doctor/DoctorAppointmentCard";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const DoctorDashboard = () => {
-  const { name, id, totalAppointments, totalEarnings, completed, cancelled } =
-    DOCTOR;
-
   const navigate = useNavigate();
-
   const dashboardItem = (icon, text, number) => {
     return (
       <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex items-center justify-between hover:shadow-md transition-all">
@@ -25,6 +23,23 @@ const DoctorDashboard = () => {
       </div>
     );
   };
+  const { data: doctor, isLoading: loadingDoctor } = useQuery({
+    queryKey: ["doctor"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/doctor");
+      return response.data?.data;
+    },
+  });
+  const { data: doctorAppointments, isLoading } = useQuery({
+    queryKey: ["doctor-appointments"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/doctor/appoinments");
+      return response.data;
+    },
+  });
+  if (isLoading && loadingDoctor) return null;
+  const { name, _id, totalAppointments, totalEarnings, completed, cancelled } =
+    doctor;
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -33,7 +48,7 @@ const DoctorDashboard = () => {
         <h1 className="text-3xl font-bold text-gray-800">{name} Dashboard</h1>
 
         <p className="text-gray-500 mt-1">
-          Showing appointments for doctor #{id}
+          Showing appointments for doctor #{_id}
         </p>
       </div>
 
@@ -76,7 +91,7 @@ const DoctorDashboard = () => {
 
       {/* Appointment Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {DUMMY_APPOINTMENTS.slice(0, 3).map((item) => (
+        {doctorAppointments?.data?.slice(0, 3).map((item) => (
           <DoctorAppointmentCard key={item._id} {...item} />
         ))}
       </div>

@@ -2,15 +2,26 @@ import React, { useEffect, useState } from "react";
 import { DUMMY_APPOINTMENTS } from "../../DUMMY/DOCTOR";
 import { Search } from "lucide-react";
 import DoctorAppointmentCard from "../../components/doctor/DoctorAppointmentCard";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 // 8.35
 const DoctorAppointments = () => {
   const [status, setStatus] = useState("all");
   const [search, setSearch] = useState("");
   const [filteredSearch, setFilteredSearch] = useState(DUMMY_APPOINTMENTS);
-   
-  useEffect(() => {
-    let data = DUMMY_APPOINTMENTS;
 
+  const { data: doctorAppointments, isLoading } = useQuery({
+    queryKey: ["doctor-appointments"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/doctor/appoinments");
+      setFilteredSearch(response?.data?.data);
+      return response.data?.data;
+    },
+  });
+
+  useEffect(() => {
+    if (!doctorAppointments) return;
+    let data = doctorAppointments;
     if (status !== "all") {
       data = data.filter((item) => item.status === status);
     }
@@ -23,29 +34,7 @@ const DoctorAppointments = () => {
     }
     setFilteredSearch(data);
   }, [search, status]);
-  // const handleSearch = (e) => {
-  //   const term = e.target.value.trim().toLowerCase();
-  //   setSearch(term);
-  //   const updated = DUMMY_APPOINTMENTS.filter((appointment) => {
-  //     return appointment.patient.name
-  //       .split(" ")
-  //       .some((val) => val.toLocaleLowerCase().startsWith(term));
-  //   });
-  //   setFilteredSearch(updated);
-  // };
-  // const handleFilterStatus = (e) => {
-  //   const value = e.target.value;
-  //   setStatus(value);
-  //   if (status == "all") {
-  //     setFilteredSearch(DUMMY_APPOINTMENTS);
-  //     return;
-  //   }
-  //   const updated = DUMMY_APPOINTMENTS.filter((appointment) => {
-  //     return appointment.status == status;
-  //   });
-  //   setFilteredSearch(updated);
-  // };
-
+  if (isLoading) return null;
   return (
     <div className="p-6">
       {/* Header */}

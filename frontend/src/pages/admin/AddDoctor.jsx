@@ -49,7 +49,7 @@ const AddDoctor = () => {
     }
   }, [doctor]);
   
-
+   
   const handleScheduleSlots = () => {
     const time = `${hour}:${min.padStart(2, "0")} ${period}`;
     let str = date + " " + time;

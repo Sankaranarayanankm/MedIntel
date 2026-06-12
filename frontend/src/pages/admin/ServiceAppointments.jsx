@@ -8,7 +8,7 @@ const ServiceAppointments = () => {
   const [filteredSearch, setFilteredSearch] = useState(
     DUMMY_SERVICE_APPOINTMENT,
   );
-
+    
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);

@@ -30,7 +30,7 @@ const AdminLogin = () => {
     e.preventDefault();
     const obj = { email, password };
     login(obj);
-  };
+  };     
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-5 py-10">

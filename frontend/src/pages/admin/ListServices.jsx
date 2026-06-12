@@ -15,8 +15,8 @@ const ListServices = () => {
         .some((val) => val.toLocaleLowerCase().startsWith(term));
     });
     setFilteredSearch(updated);
-  };
-
+  };   
+  
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}

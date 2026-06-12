@@ -56,7 +56,7 @@ const PatientSignup = () => {
       toast.error("passwords are not matching");
       return;
     }
-    console.log(input);
+
     signup(input);
 
     reset();

@@ -65,6 +65,11 @@ const App = () => {
             />
             <Route path="appointments" element={<PatientAppointments />} />
           </Route>
+          {/**
+           * !PENDING
+           * need to add patients field in the backend for doctors
+           * do migrations, first time add dummy value of 23k
+           */}
           <Route path="/doctor">
             <Route path="login" element={<DoctorLogin />} />
             <Route path="" element={<DoctorDashboard />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BsBriefcase,
   BsCheck,
@@ -10,12 +10,14 @@ import {
 import { FcCancel, FcSearch } from "react-icons/fc";
 import {
   ADMIN_DASHBOARD_SERVICE,
-  ADMIN_DOCTOR_DETAILS,   
+  ADMIN_DOCTOR_DETAILS,
 } from "../../DUMMY/data";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const AdminDashboard = () => {
   const [search, setSearch] = useState("");
-  const [filterDoctors, setFilteredDoctors] = useState(ADMIN_DOCTOR_DETAILS);
+  const [filterDoctors, setFilteredDoctors] = useState([]);
   const displayCard = (icon, text, number) => {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex items-center gap-4">
@@ -32,7 +34,7 @@ const AdminDashboard = () => {
     const searchTerm = e.target.value.trim();
     setSearch(searchTerm);
     console.log(searchTerm);
-    const updated = ADMIN_DOCTOR_DETAILS.filter((doc) => {
+    const updated = doctors.filter((doc) => {
       return doc.name
         .split(" ")
         .some((val) =>
@@ -41,7 +43,27 @@ const AdminDashboard = () => {
     });
     setFilteredDoctors(updated);
   };
-
+  const { data: dashboardData, isLoading } = useQuery({
+    queryKey: ["admin-dashboard"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/admin/dashboard");
+      return response.data?.data;
+    },
+  });
+  const { data: doctors, isLoading: doctorLoading } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("admin/doctors");
+      return response.data?.data;
+    },
+  });
+  useEffect(() => {
+    if (doctors) {
+      setFilteredDoctors(doctors);
+    }
+  }, [doctors]);
+  console.log(doctors);
+  // console.log(dashboardData?);
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
@@ -55,32 +77,32 @@ const AdminDashboard = () => {
         {displayCard(
           <BsPeople />,
           "Total Doctors",
-          ADMIN_DASHBOARD_SERVICE.totalDoctors,
+          dashboardData?.totalDoctors,
         )}
         {displayCard(
           <BsPerson />,
           "Total Patients",
-          ADMIN_DASHBOARD_SERVICE.totalPatients,
+          dashboardData?.totalPatients,
         )}
         {displayCard(
           <BsBriefcase />,
           "Total Appointments",
-          ADMIN_DASHBOARD_SERVICE.totalAppoinments,
+          dashboardData?.totalAppoinments,
         )}
         {displayCard(
           <BsCurrencyRupee />,
           "Total Revenue",
-          ADMIN_DASHBOARD_SERVICE.totalRevenue,
+          dashboardData?.totalRevenue,
         )}
         {displayCard(
           <BsCheck />,
           "Completed",
-          ADMIN_DASHBOARD_SERVICE.totalCompletedAppoinments,
+          dashboardData?.totalCompletedAppoinments,
         )}
         {displayCard(
           <FcCancel />,
           "Cancelled",
-          ADMIN_DASHBOARD_SERVICE.totalCancelledAppoinments,
+          dashboardData?.totalCancelledAppoinments,
         )}
       </div>
 

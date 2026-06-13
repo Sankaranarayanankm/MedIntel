@@ -12,6 +12,7 @@ export const getAllDoctorsController = async (req, res, next) => {
     const doctors = await getAllDoctorService();
     res.status(200).json({ success: true, data: doctors });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

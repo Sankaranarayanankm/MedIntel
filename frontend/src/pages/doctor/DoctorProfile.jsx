@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { DOCTOR } from "../../DUMMY/DOCTOR";
 import { BsCheck, BsPerson } from "react-icons/bs";
 import { IndianRupee, Star } from "lucide-react";
 import DoctorProfileForm from "../../components/doctor/DoctorProfileForm";

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { DUMMY_APPOINTMENTS } from "../../DUMMY/DOCTOR";
 import { Search } from "lucide-react";
 import DoctorAppointmentCard from "../../components/doctor/DoctorAppointmentCard";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +7,7 @@ import axiosInstance from "../../utls/axios";
 const DoctorAppointments = () => {
   const [status, setStatus] = useState("all");
   const [search, setSearch] = useState("");
-  const [filteredSearch, setFilteredSearch] = useState(DUMMY_APPOINTMENTS);
+  const [filteredSearch, setFilteredSearch] = useState([]);
 
   const { data: doctorAppointments, isLoading } = useQuery({
     queryKey: ["doctor-appointments"],
@@ -18,7 +17,11 @@ const DoctorAppointments = () => {
       return response.data?.data;
     },
   });
-
+  useEffect(() => {
+    if (doctorAppointments) {
+      setFilteredSearch(doctorAppointments);
+    }
+  }, [doctorAppointments]);
   useEffect(() => {
     if (!doctorAppointments) return;
     let data = doctorAppointments;

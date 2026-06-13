@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DOCTORS } from "../../DUMMY/data";
 import { BsPeople } from "react-icons/bs";
 import AdminDoctorCard from "../../components/admin/DoctorCard";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
+/**
+ * Edit handler
+ * Delete handler
+ * check values for edit handler,location, experiance...
+ * !Add location and patients to backend schema
+ */
 const ListDoctor = () => {
   const [filterDoctors, setFilterDoctors] = useState(DOCTORS);
   const [search, setSearch] = useState("");
 
+  const { data: doctors, isLoading: doctorLoading } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("admin/doctors");
+      return response.data?.data;
+    },
+  });
+
+  useEffect(() => {
+    if (doctors) {
+      setFilterDoctors(doctors);
+    }
+  }, [doctors]);
+  console.log(doctors[0]);
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);
-    const updated = DOCTORS.filter((doctor) => {
+    const updated = doctors.filter((doctor) => {
       return doctor.name
         .split(" ")
         .some((val) => val.toLocaleLowerCase().startsWith(term));
@@ -18,16 +40,17 @@ const ListDoctor = () => {
     setFilterDoctors(updated);
   };
   const handleClearSearch = () => {
-    setFilterDoctors(DOCTORS);
+    setFilterDoctors(doctors);
     setSearch("");
   };
   const handleAvailabilityFilter = (availability) => {
-    const updated = DOCTORS.filter(
+    const updated = doctors.filter(
       (item) => item.availability === availability,
     );
     setFilterDoctors(updated);
   };
-  return (    
+  if (doctorLoading) return null;
+  return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Header & Search */}
       <div className="bg-white rounded-2xl shadow-md p-5 mb-6">

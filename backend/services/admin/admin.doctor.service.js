@@ -11,14 +11,14 @@ export const getAllDoctorService = async () => {
   const updatedDoctors = await Promise.all(
     doctors.map(async (doc) => {
       const appoinemnts = await Appoinment.find({ doctor: doc._id });
-      const completedAppoinments = appoinments.filter(
+      const completedAppoinments = appoinemnts.filter(
         (appoin) => appoin.status === "completed",
       ).length;
-      const cancelledAppoinments = appoinments.filter(
+      const cancelledAppoinments = appoinemnts.filter(
         (appoin) => appoin.status === "cancelled" || appoin.adminCancel == true,
       ).length;
-      const totalAppoinments = appoinments.length;
-      let revenue = doc.fee * totalAppoinments;
+      const totalAppoinments = appoinemnts.length;
+      let revenue = doc.fee * completedAppoinments;
 
       return {
         ...doc,

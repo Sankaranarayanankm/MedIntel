@@ -1,5 +1,4 @@
 import React from "react";
-import { DOCTOR, DUMMY_APPOINTMENTS } from "../../DUMMY/DOCTOR";
 import { CgCalendar } from "react-icons/cg";
 import { LuIndianRupee } from "react-icons/lu";
 import { FcBusiness } from "react-icons/fc";

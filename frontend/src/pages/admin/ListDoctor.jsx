@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { DOCTORS } from "../../DUMMY/data";
 import { BsPeople } from "react-icons/bs";
 import AdminDoctorCard from "../../components/admin/DoctorCard";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utls/axios";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 /**
  * Edit handler
@@ -28,7 +30,18 @@ const ListDoctor = () => {
       setFilterDoctors(doctors);
     }
   }, [doctors]);
-  console.log(doctors[0]);
+
+  //* Delete doctor
+  const { mutate: handleDelete, isPending } = useMutation({
+    mutationFn: async (id) => axiosInstance.delete(`/admin/doctors/${id}`),
+    onSuccess: () => {
+      toast.success("delted doctor successfully");
+      queryclient.invalidateQueries({ queryKey: ["doctors"] });
+    },
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "Failed to delete doctor"),
+  });
+
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);
@@ -99,7 +112,11 @@ const ListDoctor = () => {
       {/* Doctors Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filterDoctors.map((item) => (
-          <AdminDoctorCard key={item._id} {...item} />
+          <AdminDoctorCard
+            key={item._id}
+            {...item}
+            handleDelete={handleDelete}
+          />
         ))}
       </div>
     </div>

@@ -14,9 +14,9 @@ const doctorSchema = new mongoose.Schema(
       unique: true,
     },
     password: { type: String, required: true, select: false },
-    availability: {    
+    availability: {
       type: String,
-      enum: ["available", "unavailable"],      
+      enum: ["available", "unavailable"],
       default: "available",
     },
     qualification: { type: String, required: true },
@@ -25,6 +25,14 @@ const doctorSchema = new mongoose.Schema(
     about: { type: String, required: true },
     scheduleSlots: { type: [String], required: true },
     fee: { type: Number, required: true },
+    location: {
+      type: String,
+      default: "Kerala",
+    },
+    patients: {
+      type: String,
+      default: "23k",
+    },
   },
   { timestamps: true },
 );

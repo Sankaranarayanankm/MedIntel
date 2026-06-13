@@ -16,11 +16,10 @@ const AdminDoctorCard = (props) => {
     successRate,
     patients,
   } = props;
-  // console.log(props);
+  //? we cannot pass function through navigate state, so getting doctor
+  const { handleDelete, ...doctor } = props;
+  console.log(props._id);
 
-  const deleteHandler = (name, availablity) => {
-    console.log(name, availablity);
-  };
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
       <img src={image} alt={name} className="w-full h-64 object-cover" />
@@ -71,7 +70,7 @@ const AdminDoctorCard = (props) => {
         </div>
         <div className="flex gap-5 items-center">
           <button
-            onClick={() => deleteHandler(name)}
+            onClick={() => props.handleDelete(props._id)}
             className="w-full mt-5 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 shadow-sm"
           >
             <Trash size={18} />
@@ -80,7 +79,7 @@ const AdminDoctorCard = (props) => {
 
           <button
             onClick={() =>
-              navigate("/admin/add-doctor", { state: { doctor: props } })
+              navigate("/admin/add-doctor", { state: { doctor: doctor } })
             }
             className="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center gap-2"
           >

@@ -1,7 +1,13 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { BsCalendar, BsTrash, BsPerson } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "../../utls/axios";
+import toast from "react-hot-toast";
 // date,hour,min,period
+
+//! UPDATE IMAGE UPLOAD
+
 const AddDoctor = () => {
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
@@ -13,20 +19,50 @@ const AddDoctor = () => {
     name: "",
     specialization: "",
     location: "",
-    experiance: "",
-    qualifications: "",
+    experience: "",
+    qualification: "",
     fee: "",
     rating: "",
     patients: "",
     successRate: "",
     email: "",
     password: "",
-    availablity: "",
+    availability: "",
     about: "",
   });
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const location = useLocation();
   const doctor = location.state?.doctor;
 
+  //* ADD DOCTOR
+  const { mutate: addDoctor, isPending } = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.post("admin/add-doctor", { data });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Doctor Added");
+      queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      navigate("/admin/doctors");
+    },
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "failed to add doctor"),
+  });
+  //* EDIT DOCTOR
+  const { mutate: editDoctor, isPending: editingDoctor } = useMutation({
+    mutationFn: async ({ id, data }) => {
+      const response = await axiosInstance.put(`admin/doctors/${id}`, { data });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      navigate("/admin/doctors");
+    },
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "failed to edit doctor"),
+  });
   useEffect(() => {
     if (doctor) {
       setInput({
@@ -34,22 +70,21 @@ const AddDoctor = () => {
         name: doctor.name || "",
         specialization: doctor.specialization || "",
         location: doctor.location || "",
-        experiance: doctor.experiance || "",
-        qualifications: doctor.qualifications || "",
+        experience: doctor.experience || "",
+        qualification: doctor.qualification || "",
         fee: doctor.fee || "",
         rating: doctor.rating || "",
         patients: doctor.patients || "",
         successRate: doctor.successRate || "",
         email: doctor.doctorEmail || "",
         password: doctor.password || "",
-        availablity: doctor.availablity || "",
+        availability: doctor.availability || "",
         about: doctor.about || "",
       });
       setScheduleSlots(doctor.scheduleSlots);
     }
   }, [doctor]);
-  
-   
+  console.log(doctor);
   const handleScheduleSlots = () => {
     const time = `${hour}:${min.padStart(2, "0")} ${period}`;
     let str = date + " " + time;
@@ -72,35 +107,46 @@ const AddDoctor = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    // doctor?editdoctorhandler:adddoctorhandler
-    console.log(input);
-    console.log(scheduleSlots);
+    const obj = {
+      ...input,
+      doctorEmail: input.email,
+      scheduleSlots,
+    };
+    console.log(obj);
+    if (!doctor) {
+      addDoctor(obj);
+    } else {
+      editDoctor({ id: doctor._id, data: obj });
+    }
   };
-  const inputSection = (type, placeholder, value, name) => (
+  const inputSection = (type, label, value, name) => (
     <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        {label}
+      </label>
+
       {type === "textarea" ? (
         <textarea
           name={name}
           value={value}
           onChange={handleInput}
-          placeholder={placeholder}
+          placeholder={label}
           rows={5}
           className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none resize-none focus:ring-2 focus:ring-blue-500"
         />
-      ) : type == "file" ? (
+      ) : type === "file" ? (
         <input
           name={name}
           type="file"
-          onChange={handleInput}
-          placeholder={placeholder}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none resize-none focus:ring-2 focus:ring-blue-500"
+          // onChange={handleImageChange}
+          className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
         />
       ) : (
         <input
           type={type}
           name={name}
           value={value}
-          placeholder={placeholder}
+          placeholder={label}
           onChange={handleInput}
           className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -127,12 +173,9 @@ const AddDoctor = () => {
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-5"
       >
+        {/* INPUT SECTIONS */}
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Upload Image
-          </label>
-
-          {inputSection("file", "Choose File", input.image, "image")}
+          {inputSection("file", "Upload Image", input.image, "image")}
         </div>
 
         {inputSection("text", "Full Name", input.name, "name")}
@@ -144,18 +187,22 @@ const AddDoctor = () => {
           "specialization",
         )}
         {inputSection("text", "Location", input.location, "location")}
-        {inputSection("text", "Experience", input.experiance, "experiance")}
+        {inputSection("text", "Experience", input.experience, "experience")}
         {inputSection(
           "text",
-          "Qualifications",
-          input.qualifications,
-          "qualifications",
+          "Qualification",
+          input.qualification,
+          "qualification",
         )}
-        {inputSection("text", "Success Rate", input.successRate, "successRate")}
+        {inputSection(
+          "text",
+          "Success Rate (%)",
+          input.successRate,
+          "successRate",
+        )}
         {inputSection("text", "Consultation Fee", input.fee, "fee")}
         {inputSection("text", "Rating (1-5)", input.rating, "rating")}
-        {/* no of patients consulted  */}
-        {inputSection("text", "Patients", input.patients, "patients")}
+        {inputSection("text", "Patients Consulted", input.patients, "patients")}
         {inputSection(
           "password",
           "Doctor Password",
@@ -164,9 +211,14 @@ const AddDoctor = () => {
         )}
 
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Availability
+          </label>
+
           <select
-            name="availablity"
-            id="availablity"
+            name="availability"
+            value={input.availability}
+            onChange={handleInput}
             className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Choose Availability</option>
@@ -176,12 +228,9 @@ const AddDoctor = () => {
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            About Doctor
-          </label>
-
           {inputSection("textarea", "About Doctor", input.about, "about")}
         </div>
+
         {/* ADD SCHEDULE SLOTS  */}
         <div className="md:col-span-2 bg-gray-50 border border-gray-200 rounded-xl p-5">
           <span className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">

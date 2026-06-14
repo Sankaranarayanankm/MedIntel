@@ -4,7 +4,7 @@ import Appoinment from "../models/appoinments.model.js";
 import Stripe from "stripe";
 import Doctor from "../models/doctor.model.js";
 import Service from "../models/services.model.js";
-import {  
+import {
   bookAppoinmentService,
   bookServicesService,
   editPatientDetailsService,
@@ -93,17 +93,17 @@ export const bookServicesController = async (req, res, next) => {
   try {
     const patient = req.user.id;
     const { serviceId } = req.params;
-    const { timeSlot, status } = req.body;
+    const { timeSlot, paymentMethod } = req.body;
     const serviceBooked = await bookServicesService(
       patient,
       serviceId,
       timeSlot,
-      status,
+      paymentMethod,
     );
     res.status(200).json({
       success: true,
       message: "service booked",
-      id: serviceBooked._id,
+      data: serviceBooked,
     });
   } catch (err) {
     next(err);

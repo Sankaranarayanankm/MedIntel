@@ -14,6 +14,10 @@ const serviceBookingSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    paymentMethod: {
+      type: String,
+      enum: ["online", "cash"],
+    },
     timeSlot: {
       type: String,
       required: true,

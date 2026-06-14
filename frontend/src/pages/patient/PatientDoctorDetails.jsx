@@ -35,7 +35,12 @@ const PatientDoctorDetails = () => {
       return response?.data;
     },
     onSuccess: (data) => {
-      window.location.href = data.url;
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        navigate("/patient/appointments");
+        toast.success("booked appointment");
+      }
     },
     onError: (err) =>
       toast.error(err?.response?.data?.message || "failed to book appointment"),

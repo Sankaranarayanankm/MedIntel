@@ -1,18 +1,46 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PATIENT_SERVICES } from "../../DUMMY/PATIENT";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import axiosInstance from "../../utls/axios";
 
 const PatientServiceDetails = () => {
   const [booking, setBooking] = useState("online");
   const [slot, setSlot] = useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const params = useParams();
   const { serviceId } = params;
   const services = queryClient.getQueryData(["services"]);
-
   const service = services?.find((item) => item._id === serviceId);
-  console.log(services);
+  const { mutate: bookService, isPending } = useMutation({
+    mutationFn: async ({ id, data }) => {
+      const response = await axiosInstance.post(
+        `/patient/services/${id}`,
+        data,
+      );
+      return response.data?.data;
+    },
+    onSuccess: (data) => {
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        navigate("/patient/appointments");
+        toast.success("booked appointment");
+      }
+    },
+    onError: (error) =>
+      toast.error(error?.response?.data?.message || "failed to book service"),
+  });
+  const handleBookService = () => {
+    const obj = {
+      paymentMethod: booking,
+      timeSlot: slot,
+    };
+    // console.log(obj);
+    bookService({ id: serviceId, data: obj });
+  };
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
@@ -171,7 +199,10 @@ const PatientServiceDetails = () => {
                   </div>
                 </div>
 
-                <button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition">
+                <button
+                  onClick={handleBookService}
+                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition"
+                >
                   Confirm Booking
                 </button>
               </div>

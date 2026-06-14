@@ -79,7 +79,10 @@ export const editservicesService = async (serviceId, data) => {
   }
 };
 export const getUserservicesService = async () => {
-  const userServices = await ServiceBooking.find().lean();
+  const userServices = await ServiceBooking.find()
+    .lean()
+    .populate("patient", "name gender phone")
+    .populate("service", "name");
   return userServices;
 };
 export const adminCancelUserservicesService = async (userServiceId) => {

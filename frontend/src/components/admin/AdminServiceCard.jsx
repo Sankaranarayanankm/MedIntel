@@ -26,7 +26,7 @@ const AdminServiceCard = (props) => {
     onError: (err) =>
       toast.error(err?.response?.data?.message || "failed to delete "),
   });
-  console.log(props);
+  // console.log(props);
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
       <img src={image} alt={name} className="w-full h-56 object-cover" />

@@ -1,8 +1,11 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Save, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { BiSave } from "react-icons/bi";
-import { useLocation } from "react-router-dom";
-    
+import { useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "../../utls/axios";
+import toast from "react-hot-toast";
+
 const AddService = () => {
   const [instructions, setInstructions] = useState([]);
   const [scheduleSlots, setScheduleSlots] = useState([]);
@@ -20,7 +23,8 @@ const AddService = () => {
   });
   const location = useLocation();
   const editData = location.state?.data;
-
+  // const queryClient = useQueryClient();
+  const navigate = useNavigate();
   useEffect(() => {
     if (editData) {
       setInstructions(editData.instructions || []);
@@ -34,14 +38,28 @@ const AddService = () => {
       });
     }
   }, [editData]);
-  const handleAddService = () => {
-    console.log(input, "input");
-    console.log(scheduleSlots, "time slots");
-    console.log(instructions, "instructions");
-    console.log(date, "date");
-    console.log(hour, "hour");
-    console.log(min, "min");
-  };
+  const { mutate: addService, isPending } = useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.post("/admin/services", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("added service");
+      navigate("/admin/services");
+    },
+    onError: (err) =>
+      toast.error(err?.response?.data?.message || "failed to add service"),
+  });
+  const { mutate: editService, isPending: editing } = useMutation({
+    mutationFn: async (data) =>
+      axiosInstance.put(`/admin/services/${data.id}`, data.obj),
+    onSuccess: () => {
+      toast.success("edited successfully");
+      navigate("/admin/services");
+    },
+    onError: (err) =>
+      toast.error(err?.resposne?.data?.message || "failed to edit"),
+  });
   const resetForm = () => {
     setScheduleSlots([]);
     setInstructions([]);
@@ -75,8 +93,10 @@ const AddService = () => {
     const slot = `${date}-${time}`;
     if (!scheduleSlots.includes(slot)) {
       setScheduleSlots((prev) => [...prev, slot]);
+    } else {
+      toast.error("slot exists");
+      return;
     }
-    // else show toast
   };
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -89,7 +109,16 @@ const AddService = () => {
     }
   };
   const serviceHandler = () => {
-    // if editeddata?edit handler or add handler
+    const obj = {
+      ...input,
+      scheduleSlots,
+      instructions,
+    };
+    if (editData) {
+      editService({ id: editData._id, obj });
+    } else {
+      addService(obj);
+    }
   };
   const handleDeleteInstructions = (item) => {
     const updated = instructions.filter((instruction) => instruction !== item);
@@ -110,7 +139,10 @@ const AddService = () => {
           </p>
         </div>
 
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+        <button
+          onClick={serviceHandler}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
+        >
           Save Service
         </button>
       </div>

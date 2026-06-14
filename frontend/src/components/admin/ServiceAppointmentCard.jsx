@@ -1,12 +1,28 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IndianRupee, Phone, User, Watch } from "lucide-react";
 import React, { useState } from "react";
+import axiosInstance from "../../utls/axios";
+import toast from "react-hot-toast";
 
 const ServiceAppointmentCard = (props) => {
-  const { patient, fee, service, status, timeSlot } = props;
+  const { patient, fee, service, status, timeSlot, _id } = props;
   const [statusValue, setStatusValue] = useState(status);
-  console.log(timeSlot);
   const [date, time] = timeSlot?.split(" - ");
-
+  // console.log(_id);
+  const queryClient = useQueryClient();
+  const { mutate: adminCancelService, isPending } = useMutation({
+    mutationFn: async (id) => {
+      const response = await axiosInstance.put(
+        `/admin/user-services/admin-cancel/${id}`,
+      );
+    },
+    onSuccess: () => {
+      toast.success("cancelled by admin");
+      queryClient.invalidateQueries({ queryKey: ["booked-services"] });
+    },
+    onError: (err) =>
+      toast.error(err?.response?.data?.message || "failed to cancel"),
+  });
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-5 hover:shadow-lg transition-all duration-300">
       {/* Header */}
@@ -21,23 +37,18 @@ const ServiceAppointmentCard = (props) => {
               {patient.name}
             </h3>
 
-            <p className="text-sm text-gray-500 capitalize">
-              {patient.gender} • {patient.age} yrs
-            </p>
+            <p className="text-sm text-gray-500 capitalize">{patient.gender}</p>
           </div>
         </div>
 
-        <select
-          disabled={status === "completed" || status === "cancelled"}
-          value={statusValue}
-          onChange={(e) => setStatusValue(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-        >
-          <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+        {status === "pending" && (
+          <button
+            onClick={() => adminCancelService(_id)}
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition"
+          >
+            Admin Cancel
+          </button>
+        )}
       </div>
 
       {/* Details */}
@@ -73,7 +84,7 @@ const ServiceAppointmentCard = (props) => {
           <p className="text-xs uppercase tracking-wide text-gray-500">
             Service
           </p>
-          <p className="font-medium text-gray-800">{service}</p>
+          <p className="font-medium text-gray-800">{service.name}</p>
         </div>
 
         <span

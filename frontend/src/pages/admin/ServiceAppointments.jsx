@@ -1,14 +1,26 @@
 import { Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DUMMY_SERVICE_APPOINTMENT } from "../../DUMMY/data";
 import ServiceAppointmentCard from "../../components/admin/ServiceAppointmentCard";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const ServiceAppointments = () => {
   const [search, setSearch] = useState("");
-  const [filteredSearch, setFilteredSearch] = useState(
-    DUMMY_SERVICE_APPOINTMENT,
-  );
-    
+  const [filteredSearch, setFilteredSearch] = useState([]);
+  const { data: bookedServices, isLoading } = useQuery({
+    queryKey: ["booked-services"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/admin/user-services");
+      return response?.data?.data;
+    },
+  });
+  useEffect(() => {
+    if (bookedServices) {
+      setFilteredSearch(bookedServices);
+    }
+  }, [bookedServices]);
+  console.log(bookedServices);
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);

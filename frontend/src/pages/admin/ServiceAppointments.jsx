@@ -20,7 +20,7 @@ const ServiceAppointments = () => {
       setFilteredSearch(bookedServices);
     }
   }, [bookedServices]);
-  console.log(bookedServices);
+  // console.log(bookedServices);
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);

@@ -40,13 +40,13 @@ const App = () => {
   });
   const role = user?.role || "";
   if (isLoading) {
-    return <Loader />;
+    return null;
   }
   return (
     <>
       <Toaster />
       <Routes>
-        <Route element={<AppLayout />}>
+        <Route element={<AppLayout user={user} />}>
           <Route path="/signup" element={<PatientSignup />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<ContactPage />} />

@@ -1,14 +1,26 @@
-export const PATIENT_NAVBAR = ["home", "doctors", "appoinments", "contact"];
-export const DOCTOR_NAVBAR = ["dashboard", "appoinments", "edit profile"];
+export const PATIENT_NAVBAR = [
+  { label: "Doctors", path: "/patient/doctors" },
+  { label: "Services", path: "/patient/services" },
+  { label: "Appointments", path: "/patient/appointments" },
+];
+
+export const DOCTOR_NAVBAR = [
+  { label: "Dashboard", path: "/doctor" },
+  { label: "Appointments", path: "/doctor/appointments" },
+  { label: "Profile", path: "/doctor/profile" },
+];
 export const ADMIN_NAVBAR = [
-  "dashboard",
-  "add doctor",
-  "list doctors",
-  "appoinments",
-  "services dashboard",
-  "add service",
-  "list service",
-  "service appoinments",
+  { label: "Dashboard", path: "/admin/dashboard" },
+  { label: "Add Doctor", path: "/admin/add-doctor" },
+  { label: "List Doctors", path: "/admin/doctors" },
+  { label: "Appointments", path: "/admin/appointments" },
+  { label: "Services Dashboard", path: "/admin/service-dashboard" },
+  { label: "Add Service", path: "/admin/add-service" },
+  { label: "List Services", path: "/admin/services" },
+  {
+    label: "Service Appointments",
+    path: "/admin/service-appointments",
+  },
 ];
 
 export const DUMMY_SERVICES = [

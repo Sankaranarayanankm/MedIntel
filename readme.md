@@ -17,6 +17,6 @@
 
 # TODO
 
-- admin appointments, dont show admin cancelled when appointment is already cancelled
-- navigate after login
+
+
 

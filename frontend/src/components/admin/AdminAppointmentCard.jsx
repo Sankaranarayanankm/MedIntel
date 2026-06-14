@@ -33,7 +33,6 @@ const AdminAppointmentCard = (props) => {
     onError: (err) =>
       toast.error(err.response?.data?.message || "Failed to cancel"),
   });
-  
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden">
@@ -103,10 +102,10 @@ const AdminAppointmentCard = (props) => {
               <BsCheckCircle />
               <span className="font-medium">Appointment Completed</span>
             </div>
-          ) : adminCancel ? (
+          ) : status === "cancelled" || adminCancel ? (
             <div className="flex items-center gap-2 bg-red-50 text-red-700 p-3 rounded-xl border border-red-100">
               <BsXCircle />
-              <span className="font-medium">Cancelled by Admin</span>
+              <span className="font-medium">Appointment Cancelled</span>
             </div>
           ) : (
             <button

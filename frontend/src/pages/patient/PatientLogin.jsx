@@ -1,7 +1,7 @@
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import React, { useState } from "react";
 import { data, Link } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import axiosInstance from "../../utls/axios";
 
@@ -9,7 +9,7 @@ const PatientLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [togglePassword, setTogglePassword] = useState(false);
-
+  const queryClient = useQueryClient();
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (data) => {
       const response = await axiosInstance.post("/auth/patient-login", data);
@@ -20,6 +20,7 @@ const PatientLogin = () => {
       const user = data;
       const serializedUser = JSON.stringify(user);
       localStorage.setItem("user", serializedUser);
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: (err) => {
       console.log(err.response);

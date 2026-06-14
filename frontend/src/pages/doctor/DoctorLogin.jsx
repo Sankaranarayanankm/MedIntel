@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import React, { useState } from "react";
 import axiosInstance from "../../utls/axios";
@@ -8,10 +8,10 @@ const DoctorLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [togglePassword, setTogglePassword] = useState(false);
+  const queryClient = useQueryClient();
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (data) => {
-      console.log(data);
       const response = await axiosInstance.post("/auth/doctor-login", data);
       return response.data;
     },
@@ -20,16 +20,15 @@ const DoctorLogin = () => {
       const user = data;
       const serializedUser = JSON.stringify(user);
       localStorage.setItem("user", serializedUser);
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: (err) => {
-      console.log(err.response);
       toast.error(err.response?.data?.message || "Failed to login");
     },
   });
   const handleSubmit = (e) => {
     e.preventDefault();
     const obj = { doctorEmail: email, password };
-    console.log(obj);
     login(obj);
   };
 

@@ -17,6 +17,6 @@
 
 # TODO
 
-
-
-
+- add payment api in the backend for services
+- integrate payment api in the backend
+- add page for edit and viewing patient profile

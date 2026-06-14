@@ -1,7 +1,11 @@
 import Stripe from "stripe";
+import dotenv from "dotenv";
+dotenv.config({ path: "./backend/.env" });
+
+const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 export const paymentService = async (name, fee, appoinmentId) => {
-  const session = await Stripe.checkout.sessions.create({
+  const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "payment",
     line_items: [
@@ -16,11 +20,8 @@ export const paymentService = async (name, fee, appoinmentId) => {
         quantity: 1,
       },
     ],
-    metadata: {
-      appoinmentId: appoinmentId.toString(),
-    },
-    success_url: "http://localhost:3000/success",
-    cancel_url: "http://localhost:3000/cancel",
+    success_url: "http://localhost:5173/patient/appointments",
+    cancel_url: "http://localhost:5173/patient/doctors",
   });
   return session;
 };

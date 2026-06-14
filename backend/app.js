@@ -3,7 +3,6 @@ import patientRouter from "./router/patient.routes.js";
 import adminRouter from "./router/admin.routes.js";
 import doctorRouter from "./router/doctor.routes.js";
 import authRouter from "./router/auth/auth.routes.js";
-import paymentRouter from "./router/webhook.route.js";
 import rateLimit from "express-rate-limit";
 import { connect } from "./db/db.js";
 import cors from "cors";
@@ -26,8 +25,7 @@ app.use(
 //   },
 // });
 // app.use("/api/v1", limiter); // applying rate limit on all endpoint starts with /api/v1
-// this should be used above express.json()
-app.use("/api/v1/webhook", paymentRouter);
+
 app.use(express.json({ limit: "50mb" }));
 // routes
 app.use("/api/v1/auth", authRouter);

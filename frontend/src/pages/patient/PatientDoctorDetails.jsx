@@ -1,18 +1,45 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { HeartPulse, Stethoscope, Users } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import axiosInstance from "../../utls/axios";
 
 const PatientDoctorDetails = () => {
   const [reason, setReason] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("online");
   const [timeSlot, setTimeSlot] = useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const params = useParams();
   const doctors = queryClient.getQueryData(["doctors"]);
   const { doctorId } = params;
   const doctor = doctors?.find((item) => item._id === doctorId);
 
+  const handleBookAppointment = (id) => {
+    const obj = {
+      reason,
+      paymentMethod,
+      timeSlot,
+    };
+    console.log(obj, "obj");
+    console.log(id, "id");
+    bookAppointment({ id, data: obj });
+  };
+  const { mutate: bookAppointment, isPending } = useMutation({
+    mutationFn: async ({ id, data }) => {
+      const response = await axiosInstance.post(
+        `/patient/book-appoinment/${id}`,
+        data,
+      );
+      return response?.data;
+    },
+    onSuccess: (data) => {
+      window.location.href = data.url;
+    },
+    onError: (err) =>
+      toast.error(err?.response?.data?.message || "failed to book appointment"),
+  });
   const doctorProfileItem = (icon, value, suffix, label) => (
     <div className="bg-blue-50 rounded-xl p-3 text-center">
       <div className="flex justify-center text-blue-600 mb-2">{icon}</div>
@@ -31,30 +58,30 @@ const PatientDoctorDetails = () => {
           {/* Image + Stats */}
           <div className="flex flex-col items-center">
             <img
-              src={doctor.image}
-              alt={doctor.name}
+              src={doctor?.image}
+              alt={doctor?.name}
               className="w-48 h-48 rounded-full object-cover border-4 border-blue-100 shadow-lg"
             />
 
             <div className="grid grid-cols-3 gap-3 mt-6 w-full">
               {doctorProfileItem(
                 <HeartPulse size={20} />,
-                doctor.successRate,
+                doctor?.successRate,
                 "%",
                 "Success",
               )}
 
               {doctorProfileItem(
                 <Stethoscope size={20} />,
-                doctor.experience,
+                doctor?.experience,
                 " Yrs",
                 "Experience",
               )}
 
               {doctorProfileItem(
                 <Users size={20} />,
-                doctor.patients,
-                "k+",
+                doctor?.patients,
+                "+",
                 "Patients",
               )}
             </div>
@@ -62,33 +89,33 @@ const PatientDoctorDetails = () => {
 
           {/* Doctor Details */}
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-800">{doctor.name}</h1>
+            <h1 className="text-3xl font-bold text-gray-800">{doctor?.name}</h1>
 
             <p className="text-xl text-blue-600 font-medium mt-2">
-              {doctor.specialization}
+              {doctor?.specialization}
             </p>
 
             <div className="mt-6 space-y-3 text-gray-700">
               <p>
                 <span className="font-semibold">Qualification:</span>{" "}
-                {doctor.qualification}
+                {doctor?.qualification}
               </p>
 
               <p>
                 <span className="font-semibold">Consultation Fee:</span> ₹
-                {doctor.fee}
+                {doctor?.fee}
               </p>
 
               <p>
                 <span className="font-semibold">Availability:</span>{" "}
                 <span
                   className={`font-medium ${
-                    doctor.availability === "available"
+                    doctor?.availability === "available"
                       ? "text-green-600"
                       : "text-red-600"
                   }`}
                 >
-                  {doctor.availability}
+                  {doctor?.availability}
                 </span>
               </p>
             </div>
@@ -96,7 +123,7 @@ const PatientDoctorDetails = () => {
             <div className="mt-8">
               <h3 className="text-lg font-semibold mb-2">About Doctor</h3>
 
-              <p className="text-gray-600 leading-relaxed">{doctor.about}</p>
+              <p className="text-gray-600 leading-relaxed">{doctor?.about}</p>
             </div>
           </div>
         </div>
@@ -147,12 +174,12 @@ const PatientDoctorDetails = () => {
 
             <div className="space-y-2 text-gray-600">
               <p>
-                <span className="font-medium">Doctor:</span> {doctor.name}
+                <span className="font-medium">Doctor:</span> {doctor?.name}
               </p>
 
               <p>
                 <span className="font-medium">Speciality:</span>{" "}
-                {doctor.specialization}
+                {doctor?.specialization}
               </p>
 
               <p>
@@ -162,7 +189,7 @@ const PatientDoctorDetails = () => {
 
               <p>
                 <span className="font-medium">Consultation Fee:</span> ₹
-                {doctor.fee}
+                {doctor?.fee}
               </p>
 
               <p>
@@ -226,7 +253,10 @@ const PatientDoctorDetails = () => {
               </div>
             </div>
           </div>
-          <button className="w-full mt-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition">
+          <button
+            onClick={() => handleBookAppointment(doctorId)}
+            className="w-full mt-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
+          >
             Book Appointment
           </button>
         </div>

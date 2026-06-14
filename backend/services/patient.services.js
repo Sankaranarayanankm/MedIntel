@@ -1,13 +1,9 @@
-import Stripe from "stripe";
 import Appoinment from "../models/appoinments.model.js";
 import Doctor from "../models/doctor.model.js";
 import Patient from "../models/patient.model.js";
 import ServiceBooking from "../models/serviceBooking.model.js";
 import CustomError from "../utls/customError.js";
 import { paymentService } from "./payment.service.js";
-import dotenv from "dotenv";
-dotenv.config({ path: "./backend/.env" });
-const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 export const getPatientDetailsService = async (patientId) => {
   const patient = await Patient.findById(patientId);
@@ -52,19 +48,20 @@ export const bookAppoinmentService = async (
   }
   const fee = doctor.fee;
   //checking existing appoinment
-  const existingAppoinment = await Appoinment.findOne({
-    doctor: doctorId,
-    timeSlot,
-  });
-  if (existingAppoinment) {
-    throw new CustomError("you have already booked at this time slot", 400);
-  }
+  // const existingAppoinment = await Appoinment.findOne({
+  //   doctor: doctorId,
+  //   timeSlot,
+  // });
+  // if (existingAppoinment) {
+  //   throw new CustomError("you have already booked at this time slot", 400);
+  // }
   const appoinment = await Appoinment.create({
     patient: patientId,
     doctor: doctorId,
     timeSlot,
     reason,
     paymentMethod,
+    fee,
   });
   //payment
   let url = "";

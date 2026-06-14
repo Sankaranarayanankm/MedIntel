@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { DOCTORS } from "../../DUMMY/data";
 import { BsPeople } from "react-icons/bs";
 import AdminDoctorCard from "../../components/admin/DoctorCard";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -7,14 +6,8 @@ import axiosInstance from "../../utls/axios";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-/**
- * Edit handler
- * Delete handler
- * check values for edit handler,location, experiance...
- * !Add location and patients to backend schema
- */
 const ListDoctor = () => {
-  const [filterDoctors, setFilterDoctors] = useState(DOCTORS);
+  const [filterDoctors, setFilterDoctors] = useState([]);
   const [search, setSearch] = useState("");
 
   const { data: doctors, isLoading: doctorLoading } = useQuery({

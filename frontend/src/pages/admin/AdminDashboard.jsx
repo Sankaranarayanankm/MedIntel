@@ -8,10 +8,6 @@ import {
   BsTicket,
 } from "react-icons/bs";
 import { FcCancel, FcSearch } from "react-icons/fc";
-import {
-  ADMIN_DASHBOARD_SERVICE,
-  ADMIN_DOCTOR_DETAILS,
-} from "../../DUMMY/data";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utls/axios";
 
@@ -64,6 +60,7 @@ const AdminDashboard = () => {
   }, [doctors]);
   console.log(doctors);
   // console.log(dashboardData?);
+  if (isLoading && doctorLoading) return null;
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}

@@ -28,6 +28,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "./utls/axios";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
+import ProtectRoute from "./components/ProtectRoute";
+import PublicRoute from "./components/PublicRoutes";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -47,43 +49,54 @@ const App = () => {
       <Toaster />
       <Routes>
         <Route element={<AppLayout user={user} />}>
-          <Route path="/signup" element={<PatientSignup />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/patient">
-            <Route path="login" element={<PatientLogin />} />
-            <Route path="signup" element={<PatientSignup />} />
-            <Route path="doctors" element={<PatientDoctors />} />
-            <Route
-              path="doctors/:doctorId"
-              element={<PatientDoctorDetails />}
-            />
-            <Route path="services" element={<PatientServices />} />
-            <Route
-              path="services/:serviceId"
-              element={<PatientServiceDetails />}
-            />
-            <Route path="appointments" element={<PatientAppointments />} />
+          <Route element={<PublicRoute user={user} />}>
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/doctor/login" element={<DoctorLogin />} />
+            <Route path="/patient/login" element={<PatientLogin />} />
+            <Route path="/patient/signup" element={<PatientSignup />} />
           </Route>
-          <Route path="/doctor">
-            <Route path="login" element={<DoctorLogin />} />
-            <Route path="" element={<DoctorDashboard />} />
-            <Route path="appointments" element={<DoctorAppointments />} />
-            <Route path="profile" element={<DoctorProfile />} />
+          <Route element={<ProtectRoute user={user} allowedRoute="patient" />}>
+            <Route path="/patient">
+              {/* <Route path="login" element={<PatientLogin />} />
+              <Route path="signup" element={<PatientSignup />} /> */}
+              <Route path="doctors" element={<PatientDoctors />} />
+              <Route
+                path="doctors/:doctorId"
+                element={<PatientDoctorDetails />}
+              />
+              <Route path="services" element={<PatientServices />} />
+              <Route
+                path="services/:serviceId"
+                element={<PatientServiceDetails />}
+              />
+              <Route path="appointments" element={<PatientAppointments />} />
+            </Route>
           </Route>
-          <Route path="/admin">
-            <Route path="" element={<AdminDashboard />} />
-            <Route path="login" element={<AdminLogin />} />
-            <Route path="doctors" element={<ListDoctor />} />
-            <Route path="add-doctor" element={<AddDoctor />} />
-            <Route path="appointments" element={<Appointments />} />
-            <Route path="service-dashboard" element={<ServiceDashboard />} />
-            <Route path="add-service" element={<AddService />} />
-            <Route path="services" element={<ListServices />} />
-            <Route
-              path="service-appointments"
-              element={<ServiceAppointments />}
-            />
+          <Route element={<ProtectRoute user={user} allowedRoute="doctor" />}>
+            <Route path="/doctor">
+              {/* <Route path="login" element={<DoctorLogin />} /> */}
+              <Route path="" element={<DoctorDashboard />} />
+              <Route path="appointments" element={<DoctorAppointments />} />
+              <Route path="profile" element={<DoctorProfile />} />
+            </Route>
+          </Route>
+          <Route element={<ProtectRoute user={user} allowedRoute="admin" />}>
+            <Route path="/admin">
+              <Route path="" element={<AdminDashboard />} />
+              {/* <Route path="login" element={<AdminLogin />} /> */}
+              <Route path="doctors" element={<ListDoctor />} />
+              <Route path="add-doctor" element={<AddDoctor />} />
+              <Route path="appointments" element={<Appointments />} />
+              <Route path="service-dashboard" element={<ServiceDashboard />} />
+              <Route path="add-service" element={<AddService />} />
+              <Route path="services" element={<ListServices />} />
+              <Route
+                path="service-appointments"
+                element={<ServiceAppointments />}
+              />
+            </Route>
           </Route>
         </Route>
       </Routes>

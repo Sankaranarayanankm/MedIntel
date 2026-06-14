@@ -29,7 +29,7 @@ const ListServices = () => {
     const updated = services?.filter((item) =>
       activeFilter == "all" ? item : item.availability == activeFilter,
     );
-    console.log(updated);
+    // console.log(updated);
     setFilteredSearch(updated);
   }, [activeFilter]);
   useEffect(() => {
@@ -37,7 +37,7 @@ const ListServices = () => {
       setFilteredSearch(services);
     }
   }, [services]);
-
+  if (isLoading) return null;
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}

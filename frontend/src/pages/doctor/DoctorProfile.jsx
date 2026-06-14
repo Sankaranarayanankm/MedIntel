@@ -6,8 +6,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../utls/axios";
 import toast from "react-hot-toast";
 
-
-
 const DoctorProfile = () => {
   const queryClient = useQueryClient();
   const doctorProfileItem = ({ icon, text, number }) => {

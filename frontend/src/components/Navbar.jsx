@@ -24,7 +24,7 @@ const Navbar = ({ role, navbarItems }) => {
         <ul className="hidden lg:flex items-center gap-8 font-medium">
           {navbarItems.map((item) => (
             <NavLink
-              end={item.end}
+              end={item.path}
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
@@ -90,7 +90,7 @@ const Navbar = ({ role, navbarItems }) => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.end}
+                end={item.path}
                 onClick={() => setOpenMenu(false)}
                 className={({ isActive }) =>
                   isActive ? "text-blue-600 font-semibold" : "text-gray-700"

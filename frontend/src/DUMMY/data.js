@@ -10,7 +10,7 @@ export const DOCTOR_NAVBAR = [
   { label: "Profile", path: "/doctor/profile" },
 ];
 export const ADMIN_NAVBAR = [
-  { label: "Dashboard", path: "/admin/dashboard" },
+  { label: "Dashboard", path: "/admin" },
   { label: "Add Doctor", path: "/admin/add-doctor" },
   { label: "List Doctors", path: "/admin/doctors" },
   { label: "Appointments", path: "/admin/appointments" },

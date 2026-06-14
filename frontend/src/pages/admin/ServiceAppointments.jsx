@@ -1,6 +1,5 @@
 import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { DUMMY_SERVICE_APPOINTMENT } from "../../DUMMY/data";
 import ServiceAppointmentCard from "../../components/admin/ServiceAppointmentCard";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utls/axios";
@@ -24,7 +23,7 @@ const ServiceAppointments = () => {
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);
-    const updated = DUMMY_SERVICE_APPOINTMENT.filter((appointment) => {
+    const updated = bookedServices?.filter((appointment) => {
       return appointment.patient?.name
         ?.split(" ")
         .some((val) => val.toLowerCase().startsWith(term));

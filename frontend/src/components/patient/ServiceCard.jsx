@@ -2,17 +2,17 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const ServiceCard = (props) => {
-  const { service } = props;
+  const { image, name } = props;
   const navigate = useNavigate();
-  console.log(props);
+  // console.log(props);
 
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300">
-      <img src={service.image} alt={service.name} className="w-full h-48 " />
+      <img src={image} alt={name} className="w-full h-48 " />
 
       <div className="p-5">
         <h3 className="text-lg font-semibold text-center text-gray-800 mb-4">
-          {service.name}
+          {name}
         </h3>
 
         <button

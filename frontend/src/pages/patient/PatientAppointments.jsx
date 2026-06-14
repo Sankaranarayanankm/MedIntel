@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PatientAppointmentCard from "../../components/patient/PatientAppointmentCard";
 import PatientServiceCard from "../../components/patient/PatientServiceCard";
 import { PATIENT_APPOINTMENTS, PATIENT_SERVICES } from "../../DUMMY/PATIENT";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const PatientAppointments = () => {
+  const { data: bookedAppointments, isLoading: loadingAppointments } = useQuery(
+    {
+      queryKey: ["booked-appointments"],
+      queryFn: async () => {
+        const response = await axiosInstance.get("/patient/appoinments");
+        return response?.data?.data;
+      },
+    },
+  );
+  const { data: bookedServices, isLoading: loadingServices } = useQuery({
+    queryKey: ["booked-services"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("patient/services");
+      return response?.data?.data;
+    },
+  });
 
- 
+  if (loadingAppointments && loadingServices) return null;
+  // console.log(bookedServices);
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Doctor Appointments */}
@@ -21,7 +39,7 @@ const PatientAppointments = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {PATIENT_APPOINTMENTS.map((item) => (
+          {bookedAppointments.map((item) => (
             <PatientAppointmentCard key={item._id} {...item} />
           ))}
         </div>
@@ -40,7 +58,7 @@ const PatientAppointments = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {PATIENT_SERVICES.map((item) => (
+          {bookedServices.map((item) => (
             <PatientServiceCard key={item._id} {...item} />
           ))}
         </div>

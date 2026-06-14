@@ -1,8 +1,19 @@
 import React from "react";
 import { PATIENT_SERVICES } from "../../DUMMY/PATIENT";
 import ServiceCard from "../../components/patient/ServiceCard";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const PatientServices = () => {
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("admin/services");
+      return response?.data?.data;
+    },
+  });
+  if (isLoading) return null;
+  console.log(services);
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       {/* Header */}
@@ -18,7 +29,7 @@ const PatientServices = () => {
 
       {/* Services Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {PATIENT_SERVICES.map((service) => (
+        {services?.map((service) => (
           <ServiceCard key={service._id} {...service} />
         ))}
       </div>

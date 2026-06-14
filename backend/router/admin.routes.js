@@ -24,9 +24,20 @@ import { errorMiddleware } from "../middleware/error.middleware.js";
 
 const router = express.Router();
 router.use(protectRoute);
-router.use(roleMiddleware("admin"));
 
-router.get("/doctors", getAllDoctorsController);
+// FOR ADMINS AND DOCTORS
+router.get(
+  "/doctors",
+  roleMiddleware("patient", "admin"),
+  getAllDoctorsController,
+);
+router.get(
+  "/services",
+  roleMiddleware("patient", "admin"),
+  getAllServicesController,
+);
+// FOR ADMINS ALONE
+router.use(roleMiddleware("admin"));
 router.post("/doctors", addDoctorsController);
 
 router.delete("/doctors/:doctorId", deleteDoctorController);
@@ -39,7 +50,6 @@ router.put(
 // not added in the front end now
 router.delete("/appoinments/:appoinmentId", deleteAppoinmentsController);
 
-router.get("/services", getAllServicesController);
 router.post("/services", addServicesController);
 router.delete("/services/:serviceId", deleteServicesController);
 router.put("/services/:serviceId", editServicesController);

@@ -33,7 +33,7 @@ const PatientAppointmentCard = (props) => {
               </h3>
 
               <p className="text-blue-600 font-medium">
-                {doctor.specialization}
+                {doctor.qualification}
               </p>
             </div>
 

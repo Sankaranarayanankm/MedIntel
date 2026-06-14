@@ -44,6 +44,7 @@ const App = () => {
   if (isLoading) {
     return null;
   }
+  // console.log(user?.token);
   return (
     <>
       <Toaster />

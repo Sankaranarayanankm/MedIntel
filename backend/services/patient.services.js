@@ -28,7 +28,10 @@ export const editPatientDetailsService = async (patientId, obj) => {
   return patient;
 };
 export const getUserAppoinmentsService = async (patientId) => {
-  const appoinments = await Appoinment.find({ patient: patientId });
+  const appoinments = await Appoinment.find({ patient: patientId }).populate(
+    "doctor",
+    "name qualification image",
+  );
   return appoinments;
 };
 
@@ -73,7 +76,10 @@ export const bookAppoinmentService = async (
 };
 
 export const getUserServicesService = async (patientId) => {
-  const services = await ServiceBooking.find({ patient: patientId });
+  const services = await ServiceBooking.find({ patient: patientId }).populate(
+    "service",
+    "image name",
+  );
   return services;
 };
 

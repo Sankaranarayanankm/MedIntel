@@ -8,7 +8,7 @@ import axiosInstance from "../../utls/axios";
 const PatientLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [togglePassword, setTogglePassword] = useState(false);
+  const [togglePassword, setTogglePassword] = useState(true);
   const queryClient = useQueryClient();
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (data) => {

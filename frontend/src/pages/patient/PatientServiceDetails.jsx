@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { PATIENT_SERVICES } from "../../DUMMY/PATIENT";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const PatientServiceDetails = () => {
   const [booking, setBooking] = useState("online");
   const [slot, setSlot] = useState("");
-
+  const queryClient = useQueryClient();
   const params = useParams();
   const { serviceId } = params;
-  const service = PATIENT_SERVICES.find((item) => item._id === serviceId);
-  // console.log(service);
+  const services = queryClient.getQueryData(["services"]);
+
+  const service = services?.find((item) => item._id === serviceId);
+  console.log(services);
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
@@ -18,8 +21,8 @@ const PatientServiceDetails = () => {
           {/* Image */}
           <div>
             <img
-              src={service.service.image}
-              alt={service.service.name}
+              src={service?.image}
+              alt={service?.name}
               className="w-full h-80 object-cover rounded-2xl"
             />
           </div>
@@ -27,15 +30,15 @@ const PatientServiceDetails = () => {
           {/* Details */}
           <div>
             <h2 className="text-3xl font-bold text-gray-800">
-              {service.service.name}
+              {service?.name}
             </h2>
 
             <p className="mt-3 text-gray-600 leading-relaxed">
-              {service.service.about}
+              {service?.about}
             </p>
 
             <div className="mt-4 inline-flex items-center bg-green-50 text-green-700 px-4 py-2 rounded-xl font-semibold">
-              ₹ {service.fee}
+              ₹ {service?.price}
             </div>
 
             {/* Instructions */}
@@ -45,7 +48,7 @@ const PatientServiceDetails = () => {
               </h4>
 
               <ol className="list-decimal pl-5 space-y-2 text-gray-600">
-                {service.service.instructions.map((item) => (
+                {service?.instructions.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ol>
@@ -63,7 +66,7 @@ const PatientServiceDetails = () => {
               </h4>
 
               <div className="grid gap-3">
-                {service.service.scheduleSlots.map((item) => (
+                {service?.scheduleSlots.map((item) => (
                   <button
                     key={item}
                     onClick={() => setSlot(item)}
@@ -145,7 +148,7 @@ const PatientServiceDetails = () => {
 
                   <div className="flex justify-between">
                     <span>Service</span>
-                    <span className="font-medium">{service.service.name}</span>
+                    <span className="font-medium">{service?.name}</span>
                   </div>
 
                   <div className="flex justify-between">
@@ -164,7 +167,7 @@ const PatientServiceDetails = () => {
 
                   <div className="flex justify-between text-lg font-bold text-green-600 pt-3 border-t">
                     <span>Total Amount</span>
-                    <span>₹ {service.fee}</span>
+                    <span>₹ {service?.price}</span>
                   </div>
                 </div>
 

@@ -1,15 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { DOCTORS } from "../../DUMMY/data";
 import DoctorCard from "../../components/doctor/DoctorCard";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const PatientDoctors = () => {
   const [search, setSearch] = useState("");
-  const [filteredSearch, setFilteredSearch] = useState(DOCTORS);
+  const [filteredSearch, setFilteredSearch] = useState([]);
+  const { data: doctors, isLoading } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("admin/doctors");
+      return response?.data?.data;
+    },
+  });
+  useEffect(() => {
+    if (doctors) {
+      setFilteredSearch(doctors);
+    }
+  }, [doctors]);
+  // console.log(doctors);
+  if(isLoading) return null;
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);
-    const updated = DOCTORS.filter((doctor) => {
+    const updated = doctors?.filter((doctor) => {
       return doctor.name
         .split(" ")
         .some((val) => val.toLocaleLowerCase().startsWith(term));

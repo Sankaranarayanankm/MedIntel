@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { DOCTORS } from "../../DUMMY/data";
 import { HeartPulse, Stethoscope, Users } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const PatientDoctorDetails = () => {
   const [reason, setReason] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("online");
   const [timeSlot, setTimeSlot] = useState("");
+  const queryClient = useQueryClient();
   const params = useParams();
+  const doctors = queryClient.getQueryData(["doctors"]);
   const { doctorId } = params;
-  const doctor = DOCTORS.find((item) => item._id === doctorId);
+  const doctor = doctors?.find((item) => item._id === doctorId);
+
   const doctorProfileItem = (icon, value, suffix, label) => (
     <div className="bg-blue-50 rounded-xl p-3 text-center">
       <div className="flex justify-center text-blue-600 mb-2">{icon}</div>

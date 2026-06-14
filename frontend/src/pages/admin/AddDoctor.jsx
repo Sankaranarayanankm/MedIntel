@@ -1,12 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BsCalendar, BsTrash, BsPerson } from "react-icons/bs";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utls/axios";
 import toast from "react-hot-toast";
-// date,hour,min,period
-
-//! UPDATE IMAGE UPLOAD
 
 const AddDoctor = () => {
   const [date, setDate] = useState("");
@@ -32,13 +29,11 @@ const AddDoctor = () => {
   });
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const location = useLocation();
-  const doctor = location.state?.doctor;
 
   //* ADD DOCTOR
-  const { mutate: addDoctor, isPending } = useMutation({
+  const { mutate: addDoctor, isPending: addingDoctor } = useMutation({
     mutationFn: async (data) => {
-      const response = await axiosInstance.post("admin/add-doctor", { data });
+      const response = await axiosInstance.post("admin/doctors", data);
       return response.data;
     },
     onSuccess: () => {
@@ -49,53 +44,39 @@ const AddDoctor = () => {
     onError: (err) =>
       toast.error(err.response?.data?.message || "failed to add doctor"),
   });
-  //* EDIT DOCTOR
-  const { mutate: editDoctor, isPending: editingDoctor } = useMutation({
-    mutationFn: async ({ id, data }) => {
-      const response = await axiosInstance.put(`admin/doctors/${id}`, { data });
-      return response.data;
-    },
-    onSuccess: () => {
-      toast.success("updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["doctors"] });
-      navigate("/admin/doctors");
-    },
-    onError: (err) =>
-      toast.error(err.response?.data?.message || "failed to edit doctor"),
-  });
-  useEffect(() => {
-    if (doctor) {
-      setInput({
-        image: doctor.image || "",
-        name: doctor.name || "",
-        specialization: doctor.specialization || "",
-        location: doctor.location || "",
-        experience: doctor.experience || "",
-        qualification: doctor.qualification || "",
-        fee: doctor.fee || "",
-        rating: doctor.rating || "",
-        patients: doctor.patients || "",
-        successRate: doctor.successRate || "",
-        email: doctor.doctorEmail || "",
-        password: doctor.password || "",
-        availability: doctor.availability || "",
-        about: doctor.about || "",
-      });
-      setScheduleSlots(doctor.scheduleSlots);
-    }
-  }, [doctor]);
-  console.log(doctor);
+
   const handleScheduleSlots = () => {
+    if (!date || !hour || !min) {
+      toast.error("Please fill all slot fields");
+      return;
+    }
     const time = `${hour}:${min.padStart(2, "0")} ${period}`;
     let str = date + " " + time;
 
     if (scheduleSlots.includes(str)) {
-      // show toast here
+      toast.error("Slot already exists");
       return;
     }
     setScheduleSlots((prev) => [...prev, str]);
+    setDate("");
+    setHour("");
+    setMin("");
+    setPeriod("AM");
   };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
 
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setInput((prev) => ({
+        ...prev,
+        image: reader.result,
+      }));
+    };
+
+    reader.readAsDataURL(file);
+  };
   const handleInput = (e) => {
     const { name, value } = e.target;
     setInput((prev) => {
@@ -107,17 +88,21 @@ const AddDoctor = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (scheduleSlots.length === 0) {
+      toast.error("Please add at least one schedule slot");
+      return;
+    }
+    if (!input.image) {
+      toast.error("Please upload a doctor image");
+      return;
+    }
     const obj = {
       ...input,
       doctorEmail: input.email,
       scheduleSlots,
     };
-    console.log(obj);
-    if (!doctor) {
-      addDoctor(obj);
-    } else {
-      editDoctor({ id: doctor._id, data: obj });
-    }
+
+    addDoctor(obj);
   };
   const inputSection = (type, label, value, name) => (
     <div>
@@ -135,12 +120,21 @@ const AddDoctor = () => {
           className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none resize-none focus:ring-2 focus:ring-blue-500"
         />
       ) : type === "file" ? (
-        <input
-          name={name}
-          type="file"
-          // onChange={handleImageChange}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <>
+          <input
+            name={name}
+            type="file"
+            onChange={handleImageChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {input.image && (
+            <img
+              src={input.image}
+              alt="preview"
+              className="mt-3 w-32 h-32 object-cover rounded-xl border"
+            />
+          )}
+        </>
       ) : (
         <input
           type={type}
@@ -324,9 +318,10 @@ const AddDoctor = () => {
         <div className="md:col-span-2">
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
+            disabled={addingDoctor}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-lg transition"
           >
-            Add Doctor
+            {addingDoctor ? "Adding Doctor..." : "Add Doctor"}
           </button>
         </div>
       </form>

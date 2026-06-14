@@ -304,7 +304,7 @@ const AddService = () => {
               ))}
             </div>
           </div>
-          <div className="flex justify-end mt-8">
+          {/* <div className="flex justify-end mt-8">
             <button
               onClick={handleAddService}
               className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
@@ -312,7 +312,7 @@ const AddService = () => {
               <BiSave size={18} />
               Add Service
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

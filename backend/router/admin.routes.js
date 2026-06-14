@@ -3,7 +3,8 @@ import { protectRoute, roleMiddleware } from "../middleware/auth.middleware.js";
 import {
   addDoctorsController,
   deleteDoctorController,
-  getAllDoctorsController,adminDashboardController
+  getAllDoctorsController,
+  adminDashboardController,
 } from "../controller/admin/admin.doctor.controller.js";
 import {
   adminCancelAppoinmentsController,
@@ -16,7 +17,8 @@ import {
   deleteServicesController,
   editServicesController,
   getAllServicesController,
-  getUserServices,adminServicesDashboardController
+  getUserServices,
+  adminServicesDashboardController,
 } from "../controller/admin/admin.services.controller.js";
 import { errorMiddleware } from "../middleware/error.middleware.js";
 
@@ -34,6 +36,7 @@ router.put(
   "/appoinments/admin-cancel/:appoinmentId",
   adminCancelAppoinmentsController,
 );
+// not added in the front end now
 router.delete("/appoinments/:appoinmentId", deleteAppoinmentsController);
 
 router.get("/services", getAllServicesController);

@@ -1,22 +1,43 @@
-import React, { useState } from "react";
-import { DUMMY_SERVICE } from "../../DUMMY/data";
+import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import AdminServiceCard from "../../components/admin/AdminServiceCard";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const ListServices = () => {
+  const [activeFilter, setActiveFilter] = useState("all");
   const [search, setSearch] = useState("");
-  const [filteredSearch, setFilteredSearch] = useState(DUMMY_SERVICE);
+  const [filteredSearch, setFilteredSearch] = useState([]);
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);
-    const updated = DUMMY_SERVICE.filter((service) => {
+    const updated = services?.filter((service) => {
       return service.name
         .split(" ")
         .some((val) => val.toLocaleLowerCase().startsWith(term));
     });
     setFilteredSearch(updated);
-  };   
-  
+  };
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/admin/services");
+      return response?.data?.data;
+    },
+  });
+  useEffect(() => {
+    const updated = services?.filter((item) =>
+      activeFilter == "all" ? item : item.availability == activeFilter,
+    );
+    console.log(updated);
+    setFilteredSearch(updated);
+  }, [activeFilter]);
+  useEffect(() => {
+    if (services) {
+      setFilteredSearch(services);
+    }
+  }, [services]);
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}
@@ -33,15 +54,36 @@ const ListServices = () => {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Filters */}
             <div className="flex gap-2">
-              <span className="px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition">
+              <span
+                onClick={() => setActiveFilter("all")}
+                className={`px-4 py-2 rounded-lg cursor-pointer transition ${
+                  activeFilter === "all"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
                 All
               </span>
 
-              <span className="px-4 py-2 bg-green-100 text-green-700 rounded-lg cursor-pointer hover:bg-green-200 transition">
+              <span
+                onClick={() => setActiveFilter("available")}
+                className={`px-4 py-2 rounded-lg cursor-pointer transition ${
+                  activeFilter === "available"
+                    ? "bg-green-600 text-white"
+                    : "bg-green-100 text-green-700 hover:bg-green-200"
+                }`}
+              >
                 Available
               </span>
 
-              <span className="px-4 py-2 bg-red-100 text-red-700 rounded-lg cursor-pointer hover:bg-red-200 transition">
+              <span
+                onClick={() => setActiveFilter("unavailable")}
+                className={`px-4 py-2 rounded-lg cursor-pointer transition ${
+                  activeFilter === "unavailable"
+                    ? "bg-red-600 text-white"
+                    : "bg-red-100 text-red-700 hover:bg-red-200"
+                }`}
+              >
                 Unavailable
               </span>
             </div>
@@ -66,7 +108,7 @@ const ListServices = () => {
       </div>
 
       {/* Services Grid */}
-      {filteredSearch.length == 0 ? (
+      {filteredSearch?.length == 0 ? (
         <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl shadow-md">
           <div className="text-6xl mb-4">🔍</div>
 
@@ -81,7 +123,7 @@ const ListServices = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSearch.map((service) => {
+          {filteredSearch?.map((service) => {
             return <AdminServiceCard key={service._id} {...service} />;
           })}
         </div>

@@ -2,7 +2,10 @@ import Appoinment from "../../models/appoinments.model.js";
 import CustomError from "../../utls/customError.js";
 
 export const getAppoinmentService = async () => {
-  const appoinments = await Appoinment.find().lean();
+  const appoinments = await Appoinment.find()
+    .lean()
+    .populate("doctor", "name")
+    .populate("patient", "name");
   return appoinments;
 };
 

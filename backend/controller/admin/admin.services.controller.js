@@ -1,6 +1,7 @@
 import {
   addservicesService,
   adminCancelUserservicesService,
+  adminServicesDashboardService,
   deleteservicesService,
   editservicesService,
   getallservicesService,
@@ -32,6 +33,7 @@ export const addServicesController = async (req, res, next) => {
       image,
       price,
       name,
+      availability,
       about,
       instructions,
       scheduleSlots,

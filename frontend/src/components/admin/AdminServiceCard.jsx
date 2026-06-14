@@ -1,21 +1,32 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utls/axios";
+import toast from "react-hot-toast";
 
 const AdminServiceCard = (props) => {
   const {
     name,
     image,
     price,
-    avaiability,
+    availability,
     about,
     instructions,
     scheduleSlots,
+    _id,
   } = props;
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const handleDelete = (id) => {
-    console.log(id);
-    // pass set state from the parent
-  };
+  const { mutate: deleteService, isPending } = useMutation({
+    mutationFn: async (id) => axiosInstance.delete(`/admin/services/${id}`),
+    onSuccess: () => {
+      toast.success("deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["services"] });
+    },
+    onError: (err) =>
+      toast.error(err?.response?.data?.message || "failed to delete "),
+  });
+  console.log(props);
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
       <img src={image} alt={name} className="w-full h-56 object-cover" />
@@ -26,12 +37,12 @@ const AdminServiceCard = (props) => {
 
           <span
             className={`px-3 py-1 rounded-full text-xs font-medium ${
-              avaiability === "available"
+              availability === "available"
                 ? "bg-green-100 text-green-700"
                 : "bg-red-100 text-red-700"
             }`}
           >
-            {avaiability === "available" ? "Available" : "Unavailable"}
+            {availability === "available" ? "available" : "unavailable"}
           </span>
         </div>
 
@@ -69,7 +80,7 @@ const AdminServiceCard = (props) => {
           </button>
 
           <button
-            onClick={handleDelete}
+            onClick={() => deleteService(_id)}
             className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-lg font-medium transition"
           >
             Delete

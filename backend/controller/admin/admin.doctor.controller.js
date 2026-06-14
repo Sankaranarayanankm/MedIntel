@@ -18,6 +18,8 @@ export const getAllDoctorsController = async (req, res, next) => {
 };
 
 export const addDoctorsController = async (req, res, next) => {
+  console.log(req.body);
+
   try {
     const {
       name,

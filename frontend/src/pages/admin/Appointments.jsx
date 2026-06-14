@@ -1,22 +1,37 @@
 import { Search } from "lucide-react";
-import React, { useState } from "react";
-import { APPOINTMENTS } from "../../DUMMY/data";
+import React, { useEffect, useState } from "react";
 import AdminAppointmentCard from "../../components/admin/AdminAppointmentCard";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const Appointments = () => {
   const [search, setSearch] = useState("");
-  const [filteredAppointments, setFilteredAppointments] =
-    useState(APPOINTMENTS);
+  const [filteredAppointments, setFilteredAppointments] = useState([]);
   const handleSearch = (e) => {
     const term = e.target.value.trim().toLowerCase();
     setSearch(term);
-    const updated = APPOINTMENTS.map((appointment) => {
-      return appointment.name
+    const updated = appointments?.filter((appointment) => {
+      return appointment?.doctor?.name
         .split(" ")
         .some((val) => val.toLowerCase().startsWith(term));
     });
+    console.log(updated);
     setFilteredAppointments(updated);
   };
+  const { data: appointments, isLoading } = useQuery({
+    queryKey: ["appointments"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/admin/appoinments");
+      return response?.data?.data;
+    },
+  });
+  useEffect(() => {
+    if (appointments) {
+      setFilteredAppointments(appointments);
+    }
+  }, [appointments]);
+  if (isLoading) return null;
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}
@@ -26,7 +41,7 @@ const Appointments = () => {
           <h4 className="text-2xl font-bold text-gray-800">Appointments</h4>
           <p className="text-gray-500 text-sm mt-1">
             Manage and search upcoming patient appointments
-          </p>   
+          </p>
         </div>
 
         {/* Search */}
@@ -45,7 +60,7 @@ const Appointments = () => {
 
       {/* Appointment List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {APPOINTMENTS.map((appointment) => (
+        {filteredAppointments.map((appointment) => (
           <AdminAppointmentCard key={appointment._id} {...appointment} />
         ))}
       </div>

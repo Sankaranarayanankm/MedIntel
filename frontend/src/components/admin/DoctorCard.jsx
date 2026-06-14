@@ -18,73 +18,88 @@ const AdminDoctorCard = (props) => {
   } = props;
   //? we cannot pass function through navigate state, so getting doctor
   const { handleDelete, ...doctor } = props;
-  console.log(props._id);
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+    <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">
       <img src={image} alt={name} className="w-full h-64 object-cover" />
 
       <div className="p-5">
+        {/* Header */}
         <div className="flex justify-between items-start">
-          <h5 className="text-xl font-bold text-gray-800">{name}</h5>
+          <div>
+            <h5 className="text-xl font-bold text-gray-800">{name}</h5>
+
+            <p className="text-gray-500 mt-1">{specialization}</p>
+
+            <p className="text-sm text-gray-400">
+              {experience} Years Experience
+            </p>
+          </div>
 
           <span
             className={`px-3 py-1 rounded-full text-xs font-medium ${
-              availability == "available"
+              availability === "available"
                 ? "bg-green-100 text-green-700"
                 : "bg-red-100 text-red-700"
             }`}
           >
-            {availability == "available" ? "available" : "unavailable"}
+            {availability === "available" ? "Available" : "Unavailable"}
           </span>
         </div>
 
-        <p className="text-gray-500 mt-2">
-          {specialization} • {experience} Years Experience
-        </p>
-
-        <div className="flex items-center gap-1 mt-3 text-yellow-500">
-          <Star size={18} fill="currentColor" />
-          <span className="font-medium text-gray-700">{rating}</span>
+        {/* Rating */}
+        <div className="flex items-center gap-2 mt-4">
+          <Star size={18} fill="currentColor" className="text-yellow-500" />
+          <span className="font-semibold text-gray-700">{rating}/5</span>
         </div>
 
-        <div className="flex justify-between items-center mt-4">
-          <div className="flex items-center gap-2 text-gray-600">
-            <BsPeople />
-            <span>{patients} Patients</span>
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-3 mt-5">
+          <div className="bg-gray-50 rounded-xl p-3">
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <BsPeople />
+              Patients
+            </div>
+
+            <p className="text-lg font-bold text-gray-800 mt-1">{patients}</p>
           </div>
 
-          <div className="flex items-center gap-1 font-semibold text-green-600">
-            <IndianRupee size={16} />
-            {fee}
+          <div className="bg-gray-50 rounded-xl p-3">
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <IndianRupee size={14} />
+              Fee
+            </div>
+
+            <p className="text-lg font-bold text-green-600 mt-1">₹{fee}</p>
           </div>
         </div>
 
-        <div className="mt-4">
-          <p className="text-sm text-gray-500">
-            Success Rate:
-            <span className="font-semibold text-blue-600 ml-1">
+        {/* Success Rate */}
+        <div className="mt-4 bg-blue-50 rounded-xl p-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-600">Success Rate</span>
+
+            <span className="text-lg font-bold text-blue-600">
               {successRate}%
             </span>
-          </p>
+          </div>
+
+          <div className="w-full bg-blue-100 rounded-full h-2 mt-3">
+            <div
+              className="bg-blue-600 h-2 rounded-full"
+              style={{ width: `${successRate}%` }}
+            />
+          </div>
         </div>
-        <div className="flex gap-5 items-center">
+
+        {/* Footer */}
+        <div className="mt-6 pt-4 border-t border-gray-100">
           <button
             onClick={() => props.handleDelete(props._id)}
-            className="w-full mt-5 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 shadow-sm"
+            className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 py-3 rounded-xl font-medium transition-all duration-200"
           >
             <Trash size={18} />
-            Delete Doctor
-          </button>
-
-          <button
-            onClick={() =>
-              navigate("/admin/add-doctor", { state: { doctor: doctor } })
-            }
-            className="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center gap-2"
-          >
-            <Pencil size={18} />
-            Edit Doctor
+            Remove Doctor
           </button>
         </div>
       </div>

@@ -1,9 +1,11 @@
 import React from "react";
 import { BsClock, BsPerson, BsCheckCircle, BsXCircle } from "react-icons/bs";
 import { IndianRupee } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import axiosInstance from "../../utls/axios";
 
 const AdminAppointmentCard = (props) => {
-  // console.log(appointment);
   const {
     doctor,
     patient,
@@ -15,18 +17,31 @@ const AdminAppointmentCard = (props) => {
     adminCancel,
     cancelReason,
   } = props;
-
-  const handleAdminCancel = (id) => {
-    console.log(id);
-  };
+  // console.log(props._id);
+  const queryClient = useQueryClient();
+  const { mutate: handleAdminCancel, isPending } = useMutation({
+    mutationFn: async (id) => {
+      const response = await axiosInstance.put(
+        `/admin/appoinments/admin-cancel/${id}`,
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("cancelled this appointment");
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
+    },
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "Failed to cancel"),
+  });
+  
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-5 border border-gray-100">
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden">
       {/* Header */}
-      <div className="flex justify-between items-center mb-3">
-        <div className="flex items-center gap-2 text-gray-700">
-          <BsPerson />
-          <span className="font-semibold">Doctor ID: {doctor}</span>
+      <div className="flex items-center justify-between p-5 border-b border-gray-100">
+        <div>
+          <h3 className="font-bold text-lg text-gray-800">{doctor?.name}</h3>
+          <p className="text-sm text-gray-500">Appointment ID: {props._id}</p>
         </div>
 
         <span
@@ -42,52 +57,68 @@ const AdminAppointmentCard = (props) => {
         </span>
       </div>
 
-      {/* Time */}
-      <div className="flex items-center gap-2 text-gray-600 text-sm mb-2">
-        <BsClock />
-        <span>{timeSlot}</span>
+      {/* Body */}
+      <div className="p-5">
+        {/* Appointment Details */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+            <span className="text-gray-500 font-medium">Patient</span>
+            <span className="text-gray-800 font-semibold">{patient?.name}</span>
+          </div>
+
+          <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+            <span className="text-gray-500 font-medium">Time Slot</span>
+            <span className="flex items-center gap-2 text-gray-800 font-semibold">
+              <BsClock />
+              {timeSlot}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+            <span className="text-gray-500 font-medium">Payment Method</span>
+            <span className="text-gray-800 font-semibold">{paymentMethod}</span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="text-gray-500 font-medium">Consultation Fee</span>
+            <span className="flex items-center gap-1 text-green-600 font-bold text-lg">
+              <IndianRupee size={18} />
+              {fee}
+            </span>
+          </div>
+        </div>
+
+        {/* Reason */}
+        <div className="mt-5 bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <p className="text-xs uppercase tracking-wide text-blue-600 font-semibold mb-2">
+            Appointment Reason
+          </p>
+          <p className="text-gray-700">{reason}</p>
+        </div>
+
+        {/* Status / Actions */}
+        <div className="mt-5">
+          {status === "completed" ? (
+            <div className="flex items-center gap-2 bg-green-50 text-green-700 p-3 rounded-xl border border-green-100">
+              <BsCheckCircle />
+              <span className="font-medium">Appointment Completed</span>
+            </div>
+          ) : adminCancel ? (
+            <div className="flex items-center gap-2 bg-red-50 text-red-700 p-3 rounded-xl border border-red-100">
+              <BsXCircle />
+              <span className="font-medium">Cancelled by Admin</span>
+            </div>
+          ) : (
+            <button
+              onClick={() => handleAdminCancel(props._id)}
+              className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-medium transition"
+            >
+              <BsXCircle />
+              Cancel Appointment
+            </button>
+          )}
+        </div>
       </div>
-
-      {/* Reason */}
-      <p className="text-gray-700 text-sm mb-3">
-        <span className="font-medium">Reason:</span> {reason}
-      </p>
-
-      {/* Footer */}
-      <div className="flex justify-between items-center mt-4">
-        <div className="flex items-center gap-1 text-green-600 font-semibold">
-          <IndianRupee size={16} />
-          {fee}
-        </div>
-
-        <div className="text-sm text-gray-500">
-          Payment: <span className="font-medium">{paymentMethod}</span>
-        </div>
-      </div>
-
-      {/* Cancel Info */}
-      {adminCancel ? (
-        <div className="mt-3 flex items-center gap-2 text-red-600 text-sm">
-          <BsXCircle />
-          <span>Cancelled by Admin</span>
-        </div>
-      ) : (
-        <button
-          onClick={() => handleAdminCancel(props._id)}
-          className="mt-3 flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition shadow-sm"
-        >
-          <BsXCircle />
-          Admin Cancel
-        </button>
-      )}
-
-      {/* Success badge */}
-      {status === "completed" && (
-        <div className="mt-3 flex items-center gap-2 text-green-600 text-sm">
-          <BsCheckCircle />
-          <span>Appointment Completed</span>
-        </div>
-      )}
     </div>
   );
 };

@@ -6,10 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../utls/axios";
 import toast from "react-hot-toast";
 
-/**
- * ! Need to update the backend model, add patients number to the doctor
- *
- */
+
 
 const DoctorProfile = () => {
   const queryClient = useQueryClient();
@@ -47,7 +44,7 @@ const DoctorProfile = () => {
     },
   });
   if (isLoading) return null;
-  console.log(doctor.image);
+  // console.log(doctor.image);
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Doctor Header */}

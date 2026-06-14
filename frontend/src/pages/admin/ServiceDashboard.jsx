@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SERVICE_DASHBOARD, SERVICES } from "../../DUMMY/data";
 import { Search } from "lucide-react";
 import { BsBox, BsCheckCircle, BsXCircle, BsGraphUp } from "react-icons/bs";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../utls/axios";
 
 const ServiceDashboard = () => {
   const [search, setSearch] = useState("");
   const [filteredServices, setFilteredServices] = useState(SERVICES);
-  
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/admin/services");
+      return response?.data?.data;
+    },
+  });
+  console.log(services);
+  const { data: totalServices, isLoading: loadingTotalServices } = useQuery({
+    queryKey: ["total-services"],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`/admin/dashboard/services`);
+      return response?.data?.data;
+    },
+  });
   const serviceItems = ({ icon, text, number, color }) => {
     return (
       <div className="bg-white shadow-md rounded-xl p-4 flex items-center gap-3 hover:shadow-lg transition">
@@ -19,7 +35,11 @@ const ServiceDashboard = () => {
       </div>
     );
   };
-
+  useEffect(() => {
+    if (services) {
+      setFilteredServices(services);
+    }
+  }, [services]);
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase().trim();
     setSearch(term);
@@ -30,7 +50,7 @@ const ServiceDashboard = () => {
     });
     setFilteredServices(updated);
   };
-   
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}
@@ -46,28 +66,28 @@ const ServiceDashboard = () => {
         {serviceItems({
           icon: <BsBox />,
           text: "Total Services",
-          number: SERVICE_DASHBOARD.totalServices,
+          number: totalServices.totalServices,
           color: "text-blue-600",
         })}
 
         {serviceItems({
           icon: <BsGraphUp />,
           text: "Total Revenue",
-          number: SERVICE_DASHBOARD.totalRevenue,
+          number: totalServices.totalRevenue,
           color: "text-purple-600",
         })}
 
         {serviceItems({
           icon: <BsCheckCircle />,
           text: "Completed",
-          number: SERVICE_DASHBOARD.completedServices,
+          number: totalServices.completedServices,
           color: "text-green-600",
         })}
 
         {serviceItems({
           icon: <BsXCircle />,
           text: "Cancelled",
-          number: SERVICE_DASHBOARD.cancelledServices,
+          number: totalServices.cancelledServices,
           color: "text-red-600",
         })}
       </div>

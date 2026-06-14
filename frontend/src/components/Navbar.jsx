@@ -15,7 +15,7 @@ const Navbar = ({ role, navbarItems }) => {
     <nav className="shadow-sm border-b border-gray-200 bg-white relative">
       <div className="flex items-center justify-between px-5 md:px-8 py-4">
         {/* Logo */}
-        <div>
+        <div onClick={() => navigate("/")}>
           <h4 className="text-2xl font-bold text-blue-600">MedIntel</h4>
           <p className="text-sm text-gray-500">Healthcare Solution</p>
         </div>
@@ -24,6 +24,7 @@ const Navbar = ({ role, navbarItems }) => {
         <ul className="hidden lg:flex items-center gap-8 font-medium">
           {navbarItems.map((item) => (
             <NavLink
+              end={item.end}
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
@@ -42,21 +43,21 @@ const Navbar = ({ role, navbarItems }) => {
           {!role ? (
             <>
               <button
-                onClick={() => navigate("/doctor-login")}
+                onClick={() => navigate("/doctor/login")}
                 className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition"
               >
                 Doctor Login
               </button>
 
               <button
-                onClick={() => navigate("/admin-login")}
+                onClick={() => navigate("/admin/login")}
                 className="border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition"
               >
                 Admin Login
               </button>
 
               <button
-                onClick={() => navigate("/patient-login")}
+                onClick={() => navigate("/patient/login")}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
               >
                 Patient Login
@@ -89,6 +90,7 @@ const Navbar = ({ role, navbarItems }) => {
               <NavLink
                 key={item.path}
                 to={item.path}
+                end={item.end}
                 onClick={() => setOpenMenu(false)}
                 className={({ isActive }) =>
                   isActive ? "text-blue-600 font-semibold" : "text-gray-700"
@@ -103,21 +105,21 @@ const Navbar = ({ role, navbarItems }) => {
             {!role ? (
               <>
                 <button
-                  onClick={() => navigate("/doctor-login")}
+                  onClick={() => navigate("/doctor/login")}
                   className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg"
                 >
                   Doctor Login
                 </button>
 
                 <button
-                  onClick={() => navigate("/admin-login")}
+                  onClick={() => navigate("/admin/login")}
                   className="border border-green-600 text-green-600 px-4 py-2 rounded-lg"
                 >
                   Admin Login
                 </button>
 
                 <button
-                  onClick={() => navigate("/patient-login")}
+                  onClick={() => navigate("/patient/login")}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg"
                 >
                   Patient Login

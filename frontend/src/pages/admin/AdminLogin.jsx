@@ -1,14 +1,18 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import axiosInstance from "../../utls/axios";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContextProvider";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [togglePassword, setTogglePassword] = useState(false);
-  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const authCtx = useContext(AuthContext);
+  console.log("This is from admin login");
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (data) => {
       const response = await axiosInstance.post("/auth/admin-login", data);
@@ -16,10 +20,7 @@ const AdminLogin = () => {
     },
     onSuccess: (data) => {
       toast.success("Logged in successfully");
-      const user = data;
-      const serializedUser = JSON.stringify(user);
-      localStorage.setItem("user", serializedUser);
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      authCtx.login(data);
     },
     onError: (err) => {
       console.log("Error: ", err);

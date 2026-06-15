@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, Phone, User, Eye, EyeOff } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../utls/axios";
 import { toast } from "react-hot-toast";
+import { AuthContext } from "../../context/AuthContextProvider";
 
 const PatientSignup = () => {
   const [input, setInput] = useState({
@@ -18,6 +19,7 @@ const PatientSignup = () => {
   const [togglePassword, setTogglePassword] = useState(true);
   const [toggleConfirmPassword, setToggleConfirmPassword] = useState(true);
   const queryClient = useQueryClient();
+  const authCtx = useContext(AuthContext);
   const reset = () => {
     setInput({
       name: "",
@@ -45,9 +47,7 @@ const PatientSignup = () => {
     },
     onSuccess: (data) => {
       toast.success("Signed in successfully");
-      const serializedUser = JSON.stringify(data);
-      localStorage.setItem("user", serializedUser);
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      authCtx.login(data);
     },
     onError: (error) => toast.error(err.message || "Failed to Sign-in"),
   });

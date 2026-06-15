@@ -12,26 +12,15 @@ import axiosInstance from "../utls/axios";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "./LoadingScreen";
 
-const Footer = ({ role = "patient" }) => {
+const Footer = ({ role = "patient", services }) => {
   const navigate = useNavigate();
-
-  const { data: services, isLoading } = useQuery({
-    queryKey: ["services"],
-    queryFn: async () => {
-      const response = await axiosInstance.get("/admin/services");
-      return response.data?.data;
-    },
-  });
+  // console.log(role);
   const routes = {
     home: "/",
     contact: "/contact",
     doctors: "/patient/doctors",
     services: "/patient/services",
   };
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <footer className="bg-slate-900 text-gray-300 mt-20">

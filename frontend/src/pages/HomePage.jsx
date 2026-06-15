@@ -11,18 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import LoadingScreen from "../components/LoadingScreen";
 
-const HomePage = () => {
+const HomePage = ({ services }) => {
   const navigate = useNavigate();
-  const { data: services, isLoading } = useQuery({
-    queryKey: ["services"],
-    queryFn: async () => {
-      const resposne = await axiosInstance.get("admin/services");
-      return resposne.data?.data;
-    },
-  });
-  // if (isLoading) {
-  //   return <LoadingScreen />;
-  // }
+
   return (
     <div>
       {/* Hero Section */}

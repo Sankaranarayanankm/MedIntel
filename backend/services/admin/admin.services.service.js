@@ -2,12 +2,6 @@ import ServiceBooking from "../../models/serviceBooking.model.js";
 import Service from "../../models/services.model.js";
 import CustomError from "../../utls/customError.js";
 
-// export const getallservicesService = async () => {
-//   const services = await Service.find().lean();
-//   //  i need to find revenue of each service here
-//   return services;
-// };
-
 export const getallservicesService = async () => {
   const services = await Service.find().lean();
   const bookings = await ServiceBooking.find().lean();

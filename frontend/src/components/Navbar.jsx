@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { AuthContext } from "../context/AuthContextProvider";
 
 const Navbar = ({ role, navbarItems }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/");
-    window.location.reload();
-  };
+  const authCtx = useContext(AuthContext);
 
   return (
     <nav className="shadow-sm border-b border-gray-200 bg-white relative">
@@ -67,7 +64,7 @@ const Navbar = ({ role, navbarItems }) => {
             </>
           ) : (
             <button
-              onClick={handleLogout}
+              onClick={() => authCtx.logout()}
               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition cursor-pointer"
             >
               Logout
@@ -131,7 +128,7 @@ const Navbar = ({ role, navbarItems }) => {
               </>
             ) : (
               <button
-                onClick={handleLogout}
+                onClick={() => authCtx.logout()}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg cursor-pointer"
               >
                 Logout

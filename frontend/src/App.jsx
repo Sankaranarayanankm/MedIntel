@@ -26,26 +26,36 @@ import PatientServiceDetails from "./pages/patient/PatientServiceDetails";
 import { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "./utls/axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import ProtectRoute from "./components/ProtectRoute";
 import PublicRoute from "./components/PublicRoutes";
 import PatientProfile from "./pages/PatientProfile ";
 import ErrorPage from "./pages/ErrorPage";
 import LoadingScreen from "./components/LoadingScreen";
+import { AuthContext } from "./context/AuthContextProvider";
 
 const App = () => {
-  const [user, setUser] = useState(() =>
-    JSON.parse(localStorage.getItem("user") || "null"),
-  );
-  const role = user?.role || "";
+  const authCtx = useContext(AuthContext);
+  const user = authCtx.user;
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const resposne = await axiosInstance.get("admin/services");
+      return resposne.data?.data;
+    },
+  });
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+  // console.log(user);
 
   return (
     <>
       <Toaster />
       <Routes>
-        <Route element={<AppLayout user={user} />}>
-          <Route path="/" element={<HomePage />} />
+        <Route element={<AppLayout user={user} services={services} />}>
+          <Route path="/" element={<HomePage services={services} />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route element={<PublicRoute user={user} />}>
             <Route path="/admin/login" element={<AdminLogin />} />

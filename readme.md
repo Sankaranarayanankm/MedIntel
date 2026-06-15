@@ -15,12 +15,10 @@
 
 # TODO
 
+- create a service provider and update everything
 - udpate the existing datas
 
 
-- check places where we get querydata from authUser
-- fix navigation after login
-- admin doctors availablity filter bug
 
 ## LAST
 

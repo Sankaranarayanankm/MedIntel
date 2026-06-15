@@ -31,6 +31,8 @@ import { Loader } from "lucide-react";
 import ProtectRoute from "./components/ProtectRoute";
 import PublicRoute from "./components/PublicRoutes";
 import PatientProfile from "./pages/PatientProfile ";
+import ErrorPage from "./pages/ErrorPage";
+import LoadingScreen from "./components/LoadingScreen";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -42,9 +44,9 @@ const App = () => {
     },
   });
   const role = user?.role || "";
-  if (isLoading) {
-    return null;
-  }
+  // if (isLoading) {
+  //   return <LoadingScreen />;
+  // }
   return (
     <>
       <Toaster />
@@ -102,6 +104,7 @@ const App = () => {
             </Route>
           </Route>
         </Route>
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>
   );

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import LoadingScreen from "../components/LoadingScreen";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -19,8 +20,9 @@ const HomePage = () => {
       return resposne.data?.data;
     },
   });
-  // console.log(services);
-  if (isLoading) return null;
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <div>
       {/* Hero Section */}

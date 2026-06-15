@@ -14,7 +14,6 @@
 - migrations
 
 # TODO
-- add links in footer and home page
 - add loading page
 - add error page
 ## LAST

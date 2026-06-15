@@ -10,9 +10,11 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../utls/axios";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "./LoadingScreen";
 
 const Footer = ({ role = "patient" }) => {
   const navigate = useNavigate();
+
   const { data: services, isLoading } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
@@ -26,7 +28,10 @@ const Footer = ({ role = "patient" }) => {
     doctors: "/patient/doctors",
     services: "/patient/services",
   };
-  if (isLoading) return null;
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <footer className="bg-slate-900 text-gray-300 mt-20">

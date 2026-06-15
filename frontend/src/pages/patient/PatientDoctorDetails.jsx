@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import axiosInstance from "../../utls/axios";
 
-const PatientDoctorDetails = () => {
+const PatientDoctorDetails = ({ user }) => {
   const [reason, setReason] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("online");
   const [timeSlot, setTimeSlot] = useState("");
@@ -13,8 +13,6 @@ const PatientDoctorDetails = () => {
   const navigate = useNavigate();
   const params = useParams();
   const doctors = queryClient.getQueryData(["doctors"]);
-  const user = queryClient.getQueryData(["authUser"]);
-  console.log(user, "this is user from doctor appointment");
   const { doctorId } = params;
   const doctor = doctors?.find((item) => item._id === doctorId);
 

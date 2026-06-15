@@ -39,10 +39,7 @@ const App = () => {
     JSON.parse(localStorage.getItem("user") || "null"),
   );
   const role = user?.role || "";
-  // if (isLoading) {
-  //   return <LoadingScreen />;
-  // }
-  console.log(user, "this is user");
+
   return (
     <>
       <Toaster />
@@ -60,12 +57,12 @@ const App = () => {
             <Route path="doctors" element={<PatientDoctors />} />
             <Route
               path="doctors/:doctorId"
-              element={<PatientDoctorDetails />}
+              element={<PatientDoctorDetails user={user} />}
             />
             <Route path="services" element={<PatientServices />} />
             <Route
               path="services/:serviceId"
-              element={<PatientServiceDetails />}
+              element={<PatientServiceDetails user={user} />}
             />
             <Route
               element={<ProtectRoute user={user} allowedRoute="patient" />}

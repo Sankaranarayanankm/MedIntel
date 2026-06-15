@@ -59,7 +59,7 @@ const PatientAppointments = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {bookedServices.map((item) => {
-            console.log(item.service.image);
+            // console.log(item.service.image);
             return <PatientServiceCard key={item._id} {...item} />;
           })}
         </div>

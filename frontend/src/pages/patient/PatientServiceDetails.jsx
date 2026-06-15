@@ -5,16 +5,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import axiosInstance from "../../utls/axios";
 
-const PatientServiceDetails = () => {
+const PatientServiceDetails = ({ user }) => {
   const [booking, setBooking] = useState("online");
   const [slot, setSlot] = useState("");
   const queryClient = useQueryClient();
-
   const navigate = useNavigate();
   const params = useParams();
   const { serviceId } = params;
   const services = queryClient.getQueryData(["services"]);
-  const user = queryClient.getQueryData(["authUser"]);
   const service = services?.find((item) => item._id === serviceId);
   const { mutate: bookService, isPending } = useMutation({
     mutationFn: async ({ id, data }) => {

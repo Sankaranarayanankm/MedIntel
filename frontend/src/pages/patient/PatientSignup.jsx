@@ -15,7 +15,7 @@ const PatientSignup = () => {
     password: "",
     confirm: "",
   });
-  const [togglePassword, setTogglePassword] = useState(false);
+  const [togglePassword, setTogglePassword] = useState(true);
   const [toggleConfirmPassword, setToggleConfirmPassword] = useState(true);
   const queryClient = useQueryClient();
   const reset = () => {
@@ -214,7 +214,7 @@ const PatientSignup = () => {
                   type="button"
                   onClick={() => setTogglePassword((prev) => !prev)}
                 >
-                  {togglePassword ? (
+                  {!togglePassword ? (
                     <EyeOff
                       size={18}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -250,7 +250,7 @@ const PatientSignup = () => {
                   type="button"
                   onClick={() => setToggleConfirmPassword((prev) => !prev)}
                 >
-                  {toggleConfirmPassword ? (
+                  {!toggleConfirmPassword ? (
                     <EyeOff
                       size={18}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"

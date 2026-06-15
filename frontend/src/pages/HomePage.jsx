@@ -20,9 +20,9 @@ const HomePage = () => {
       return resposne.data?.data;
     },
   });
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+  // if (isLoading) {
+  //   return <LoadingScreen />;
+  // }
   return (
     <div>
       {/* Hero Section */}
@@ -47,14 +47,14 @@ const HomePage = () => {
             <div className="flex flex-wrap gap-4 mt-8">
               <button
                 onClick={() => navigate("/patient/doctors")}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer"
               >
                 Book Appointment
               </button>
 
               <button
                 onClick={() => navigate("/patient/services")}
-                className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition"
+                className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition cursor-pointer"
               >
                 Explore Services
               </button>
@@ -173,7 +173,7 @@ const HomePage = () => {
 
                   <button
                     onClick={() => navigate(`/patient/services/${service._id}`)}
-                    className="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                    className="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
                   >
                     View Details
                   </button>
@@ -217,7 +217,7 @@ const HomePage = () => {
 
           <button
             onClick={() => navigate("/patient/login")}
-            className="mt-8 bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:scale-105 transition"
+            className="mt-8 bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:scale-105 transition cursor-pointer"
           >
             Get Started
           </button>

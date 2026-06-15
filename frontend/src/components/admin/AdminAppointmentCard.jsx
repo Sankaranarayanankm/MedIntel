@@ -110,7 +110,7 @@ const AdminAppointmentCard = (props) => {
           ) : (
             <button
               onClick={() => handleAdminCancel(props._id)}
-              className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-medium transition"
+              className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-medium transition cursor-pointer"
             >
               <BsXCircle />
               Cancel Appointment

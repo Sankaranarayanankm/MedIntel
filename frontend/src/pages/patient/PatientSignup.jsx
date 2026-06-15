@@ -171,7 +171,7 @@ const PatientSignup = () => {
                   value={input.dob}
                   name="dob"
                   onChange={handleInput}
-                  className="w-full border border-gray-300 rounded-xl py-3 px-4 outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-xl py-3 px-4 outline-none focus:ring-2 focus:ring-blue-500 "
                 />
               </div>
 
@@ -182,7 +182,7 @@ const PatientSignup = () => {
                   value={input.gender}
                   name="gender"
                   onChange={handleInput}
-                  className="w-full border border-gray-300 rounded-xl py-3 px-4 outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-xl py-3 px-4 outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 >
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
@@ -212,17 +212,18 @@ const PatientSignup = () => {
                 />
                 <button
                   type="button"
+                  className="cursor-pointer"
                   onClick={() => setTogglePassword((prev) => !prev)}
                 >
                   {!togglePassword ? (
                     <EyeOff
                       size={18}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 "
                     />
                   ) : (
                     <Eye
                       size={18}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 "
                     />
                   )}
                 </button>
@@ -248,6 +249,7 @@ const PatientSignup = () => {
                 />
                 <button
                   type="button"
+                  className="cursor-pointer"
                   onClick={() => setToggleConfirmPassword((prev) => !prev)}
                 >
                   {!toggleConfirmPassword ? (
@@ -267,7 +269,7 @@ const PatientSignup = () => {
 
             <button
               onClick={handleSubmit}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition cursor-pointer"
             >
               {isPending ? "Please Wait" : "Create Account"}
             </button>
@@ -275,7 +277,10 @@ const PatientSignup = () => {
 
           <p className="text-center mt-6 text-gray-500">
             Already have an account?{" "}
-            <Link to="/patient/login" className="text-blue-600 font-semibold">
+            <Link
+              to="/patient/login"
+              className="text-blue-600 font-semibold cursor-pointer"
+            >
               Login
             </Link>
           </p>

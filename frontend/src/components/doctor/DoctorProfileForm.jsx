@@ -99,7 +99,7 @@ const DoctorProfileForm = (props) => {
             type="file"
             name="image"
             onChange={(e) => handleImageChange(e)}
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full border rounded-lg px-4 py-3 cursor-pointer"
           />
           {input.image && (
             <img
@@ -183,7 +183,7 @@ const DoctorProfileForm = (props) => {
             name="availability"
             value={input.availability}
             onChange={handleInput}
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full border rounded-lg px-4 py-3 cursor-pointer"
           >
             <option value="available">Available</option>
             <option value="unavailable">Unavailable</option>
@@ -219,7 +219,7 @@ const DoctorProfileForm = (props) => {
           <button
             type="button"
             onClick={addSlot}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg cursor-pointer"
           >
             Add
           </button>
@@ -236,7 +236,7 @@ const DoctorProfileForm = (props) => {
               <button
                 type="button"
                 onClick={() => removeSlot(index)}
-                className="text-red-500"
+                className="text-red-500 cursor-pointer"
               >
                 ✕
               </button>
@@ -247,7 +247,7 @@ const DoctorProfileForm = (props) => {
 
       <button
         type="submit"
-        className="mt-8 w-full bg-blue-600 text-white py-3 rounded-lg font-medium"
+        className="mt-8 w-full cursor-pointer bg-blue-600 text-white py-3 rounded-lg font-medium"
       >
         Save Profile
       </button>

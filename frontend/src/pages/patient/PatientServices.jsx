@@ -13,7 +13,7 @@ const PatientServices = () => {
     },
   });
   if (isLoading) return null;
-  console.log(services);
+  // console.log(services);
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       {/* Header */}

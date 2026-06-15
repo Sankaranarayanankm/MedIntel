@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import DoctorAppointmentCard from "../../components/doctor/DoctorAppointmentCard";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../utls/axios";
-// 8.35
+
 const DoctorAppointments = () => {
   const [status, setStatus] = useState("all");
   const [search, setSearch] = useState("");
@@ -38,7 +38,7 @@ const DoctorAppointments = () => {
     setFilteredSearch(data);
   }, [search, status]);
   if (isLoading) return null;
-  return (
+  return (    
     <div className="p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">

@@ -113,7 +113,7 @@ const PatientLogin = () => {
                 <button
                   type="button"
                   onClick={() => setTogglePassword(!togglePassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   {togglePassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -122,7 +122,7 @@ const PatientLogin = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition cursor-pointer"
             >
               {isPending ? "Please Wait" : "Login"}
             </button>
@@ -132,7 +132,7 @@ const PatientLogin = () => {
             Don’t have an account?{" "}
             <Link
               to="/patient/signup"
-              className="text-blue-600 font-semibold cursor-pointer"
+              className="text-blue-600 font-semibold cursor-pointer cursor-pointer"
             >
               Signup
             </Link>

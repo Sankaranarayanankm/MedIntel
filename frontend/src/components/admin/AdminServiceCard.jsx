@@ -74,14 +74,14 @@ const AdminServiceCard = (props) => {
             onClick={() =>
               navigate("/admin/add-service", { state: { data: props } })
             }
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition cursor-pointer"
           >
             Edit
           </button>
 
           <button
             onClick={() => deleteService(_id)}
-            className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-lg font-medium transition"
+            className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-lg font-medium transition cursor-pointer"
           >
             Delete
           </button>

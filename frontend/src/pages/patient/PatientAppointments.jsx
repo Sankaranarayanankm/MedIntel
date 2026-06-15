@@ -18,13 +18,13 @@ const PatientAppointments = () => {
   const { data: bookedServices, isLoading: loadingServices } = useQuery({
     queryKey: ["booked-services"],
     queryFn: async () => {
-      const response = await axiosInstance.get("patient/services");
+      const response = await axiosInstance.get("/patient/services");
       return response?.data?.data;
     },
   });
 
-  if (loadingAppointments && loadingServices) return null;
-  // console.log(bookedServices);
+  if (loadingAppointments || loadingServices) return null;
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       {/* Doctor Appointments */}
@@ -58,9 +58,10 @@ const PatientAppointments = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {bookedServices.map((item) => (
-            <PatientServiceCard key={item._id} {...item} />
-          ))}
+          {bookedServices.map((item) => {
+            console.log(item.service.image);
+            return <PatientServiceCard key={item._id} {...item} />;
+          })}
         </div>
       </section>
     </div>

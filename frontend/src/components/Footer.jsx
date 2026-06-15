@@ -120,7 +120,7 @@ const Footer = ({ role = "patient" }) => {
                   navigate("/patient/services");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="mt-4 text-blue-400 hover:text-blue-300 transition"
+                className="mt-4 text-blue-400 hover:text-blue-300 transition cursor-pointer"
               >
                 View More
               </button>

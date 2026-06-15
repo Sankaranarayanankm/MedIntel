@@ -152,7 +152,7 @@ const PatientDoctorDetails = () => {
               <button
                 key={item}
                 onClick={() => setTimeSlot(item)}
-                className={`px-4 py-2 rounded-xl border transition ${
+                className={`px-4 py-2 rounded-xl border transition cursor-pointer ${
                   timeSlot === item
                     ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white border-gray-300 hover:bg-blue-50"
@@ -264,7 +264,7 @@ const PatientDoctorDetails = () => {
           </div>
           <button
             onClick={() => handleBookAppointment(doctorId)}
-            className="w-full mt-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
+            className="w-full mt-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition cursor-pointer"
           >
             Book Appointment
           </button>

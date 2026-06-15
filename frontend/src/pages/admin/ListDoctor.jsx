@@ -83,7 +83,7 @@ const ListDoctor = () => {
 
             <button
               onClick={handleClearSearch}
-              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition cursor-pointer"
             >
               Clear
             </button>
@@ -93,11 +93,11 @@ const ListDoctor = () => {
 
       {/* Filters */}
       <div className="flex gap-3 mb-6">
-        <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium">
+        <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium cursor-pointer">
           Available
         </button>
 
-        <button className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium">
+        <button className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium cursor-pointer">
           Unavailable
         </button>
       </div>

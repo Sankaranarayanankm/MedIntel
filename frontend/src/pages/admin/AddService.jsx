@@ -100,13 +100,15 @@ const AddService = () => {
   };
   const handleImage = (e) => {
     const file = e.target.files[0];
-
-    if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
       setInput((prev) => ({
         ...prev,
-        image: URL.createObjectURL(file),
+        image: reader.result,
       }));
-    }
+    };
+
+    reader.readAsDataURL(file);
   };
   const serviceHandler = () => {
     const obj = {
@@ -141,7 +143,7 @@ const AddService = () => {
 
         <button
           onClick={serviceHandler}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer"
         >
           Save Service
         </button>
@@ -171,7 +173,7 @@ const AddService = () => {
             accept="image/*"
             name="image"
             onChange={handleImage}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 cursor-pointer"
           />
         </div>
 
@@ -213,7 +215,7 @@ const AddService = () => {
                 name="availability"
                 value={input.availability}
                 onChange={handleInput}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer"
               >
                 <option value="available">Available</option>
                 <option value="unavailable">Unavailable</option>
@@ -243,7 +245,7 @@ const AddService = () => {
               <button
                 onClick={handleInstructions}
                 type="button"
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg cursor-pointer"
               >
                 Add
               </button>
@@ -267,7 +269,7 @@ const AddService = () => {
                   <X
                     size={18}
                     onClick={() => handleDeleteInstructions(item)}
-                    className="text-red-500"
+                    className="text-red-500 cursor-pointer"
                   />
                 </li>
               ))}
@@ -290,6 +292,8 @@ const AddService = () => {
                 type="number"
                 placeholder="Hour"
                 value={hour}
+                min={0}
+                max={12}
                 onChange={(e) => setHour(e.target.value)}
                 className="border rounded-lg px-4 py-3"
               />
@@ -298,6 +302,8 @@ const AddService = () => {
                 type="number"
                 placeholder="Min"
                 value={min}
+                min="0"
+                max="60"
                 onChange={(e) => setMin(e.target.value)}
                 className="border rounded-lg px-4 py-3"
               />
@@ -305,7 +311,7 @@ const AddService = () => {
               <select
                 value={period}
                 onChange={(e) => setPeriod(e.target.value)}
-                className="border rounded-lg px-4 py-3"
+                className="border rounded-lg px-4 py-3 cursor-pointer"
               >
                 <option>AM</option>
                 <option>PM</option>
@@ -315,7 +321,7 @@ const AddService = () => {
             <button
               onClick={handleSheduleSlots}
               type="button"
-              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg"
+              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg cursor-pointer"
             >
               Add Time Slot
             </button>
@@ -330,7 +336,7 @@ const AddService = () => {
                   <X
                     size={18}
                     onClick={() => handleDeleteScheduleSlots(item)}
-                    className="text-red-500"
+                    className="text-red-500 cursor-pointer"
                   />
                 </span>
               ))}

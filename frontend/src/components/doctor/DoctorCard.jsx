@@ -20,7 +20,7 @@ const DoctorCard = (props) => {
 
       <button
         onClick={() => navigate(`/patient/doctors/${props._id}`)}
-        className="w-full mt-5 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
+        className="w-full mt-5 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition cursor-pointer"
       >
         Book Now
       </button>

@@ -35,18 +35,14 @@ import ErrorPage from "./pages/ErrorPage";
 import LoadingScreen from "./components/LoadingScreen";
 
 const App = () => {
-  const queryClient = useQueryClient();
-  const { data: user, isLoading } = useQuery({
-    queryKey: ["authUser"],
-    queryFn: () => {
-      const localData = localStorage.getItem("user");
-      return localData ? JSON.parse(localData) : null;
-    },
-  });
+  const [user, setUser] = useState(() =>
+    JSON.parse(localStorage.getItem("user") || "null"),
+  );
   const role = user?.role || "";
   // if (isLoading) {
   //   return <LoadingScreen />;
   // }
+  console.log(user, "this is user");
   return (
     <>
       <Toaster />

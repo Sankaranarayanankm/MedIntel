@@ -58,7 +58,7 @@ const AdminDashboard = () => {
       setFilteredDoctors(doctors);
     }
   }, [doctors]);
-  console.log(doctors);
+  // console.log(doctors);
   // console.log(dashboardData?);
   if (isLoading && doctorLoading) return null;
   return (
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
               setSearch("");
               setFilteredDoctors(ADMIN_DOCTOR_DETAILS);
             }}
-            className="px-5 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            className="px-5 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer"
           >
             Clear
           </button>

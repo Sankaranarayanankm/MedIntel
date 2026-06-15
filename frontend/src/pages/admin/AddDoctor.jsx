@@ -125,7 +125,7 @@ const AddDoctor = () => {
             name={name}
             type="file"
             onChange={handleImageChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           />
           {input.image && (
             <img
@@ -213,7 +213,7 @@ const AddDoctor = () => {
             name="availability"
             value={input.availability}
             onChange={handleInput}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           >
             <option value="">Choose Availability</option>
             <option value="available">Available</option>
@@ -281,7 +281,7 @@ const AddDoctor = () => {
             <select
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              className="border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             >
               <option>AM</option>
               <option>PM</option>
@@ -291,7 +291,7 @@ const AddDoctor = () => {
           <button
             onClick={handleScheduleSlots}
             type="button"
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium transition"
+            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium transition cursor-pointer"
           >
             Add Slot
           </button>
@@ -319,7 +319,7 @@ const AddDoctor = () => {
           <button
             type="submit"
             disabled={addingDoctor}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-lg transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 rounded-lg transition cursor-pointer"
           >
             {addingDoctor ? "Adding Doctor..." : "Add Doctor"}
           </button>

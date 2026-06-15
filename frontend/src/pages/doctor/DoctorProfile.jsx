@@ -118,7 +118,7 @@ const DoctorProfile = () => {
         <DoctorProfileForm {...doctor} updateProfile={updateProfile} />
       </div>
     </div>
-  );
+  );    
 };
 
 export default DoctorProfile;

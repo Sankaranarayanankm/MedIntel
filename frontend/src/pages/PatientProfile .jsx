@@ -72,7 +72,7 @@ const PatientProfile = () => {
 
           {!isEditing && (
             <button
-              className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-xl shadow hover:scale-105 transition"
+              className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-xl shadow hover:scale-105 transition cursor-pointer"
               onClick={() => setIsEditing(true)}
             >
               Edit Profile

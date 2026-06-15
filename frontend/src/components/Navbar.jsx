@@ -16,7 +16,9 @@ const Navbar = ({ role, navbarItems }) => {
       <div className="flex items-center justify-between px-5 md:px-8 py-4">
         {/* Logo */}
         <div onClick={() => navigate("/")}>
-          <h4 className="text-2xl font-bold text-blue-600">MedIntel</h4>
+          <h4 className="text-2xl cursor-pointer font-bold text-blue-600">
+            MedIntel
+          </h4>
           <p className="text-sm text-gray-500">Healthcare Solution</p>
         </div>
 
@@ -29,8 +31,8 @@ const Navbar = ({ role, navbarItems }) => {
               to={item.path}
               className={({ isActive }) =>
                 isActive
-                  ? "text-blue-600 font-semibold"
-                  : "text-gray-700 hover:text-blue-600 transition"
+                  ? "text-blue-600 font-semibold cursor-pointer"
+                  : "text-gray-700 hover:text-blue-600 cursor-pointer transition"
               }
             >
               {item.label}
@@ -44,21 +46,21 @@ const Navbar = ({ role, navbarItems }) => {
             <>
               <button
                 onClick={() => navigate("/doctor/login")}
-                className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition"
+                className="border cursor-pointer border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition"
               >
                 Doctor Login
               </button>
 
               <button
                 onClick={() => navigate("/admin/login")}
-                className="border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition"
+                className="border cursor-pointer border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition"
               >
                 Admin Login
               </button>
 
               <button
                 onClick={() => navigate("/patient/login")}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
               >
                 Patient Login
               </button>
@@ -66,7 +68,7 @@ const Navbar = ({ role, navbarItems }) => {
           ) : (
             <button
               onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition cursor-pointer"
             >
               Logout
             </button>
@@ -75,7 +77,7 @@ const Navbar = ({ role, navbarItems }) => {
 
         {/* Mobile Menu Button */}
         <button
-          className="lg:hidden"
+          className="lg:hidden cursor-pointer "
           onClick={() => setOpenMenu((prev) => !prev)}
         >
           {openMenu ? <X size={28} /> : <Menu size={28} />}
@@ -93,7 +95,9 @@ const Navbar = ({ role, navbarItems }) => {
                 end={item.path}
                 onClick={() => setOpenMenu(false)}
                 className={({ isActive }) =>
-                  isActive ? "text-blue-600 font-semibold" : "text-gray-700"
+                  isActive
+                    ? "text-blue-600 font-semibold cursor-pointer"
+                    : "text-gray-700 cursor-pointer"
                 }
               >
                 {item.label}
@@ -106,21 +110,21 @@ const Navbar = ({ role, navbarItems }) => {
               <>
                 <button
                   onClick={() => navigate("/doctor/login")}
-                  className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg"
+                  className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg cursor-pointer"
                 >
                   Doctor Login
                 </button>
 
                 <button
                   onClick={() => navigate("/admin/login")}
-                  className="border border-green-600 text-green-600 px-4 py-2 rounded-lg"
+                  className="border border-green-600 text-green-600 px-4 py-2 rounded-lg cursor-pointer"
                 >
                   Admin Login
                 </button>
 
                 <button
                   onClick={() => navigate("/patient/login")}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer"
                 >
                   Patient Login
                 </button>

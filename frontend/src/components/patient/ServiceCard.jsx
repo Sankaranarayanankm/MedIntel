@@ -17,7 +17,7 @@ const ServiceCard = (props) => {
 
         <button
           onClick={() => navigate(`/patient/services/${props._id}`)}
-          className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 transition cursor-pointer"
         >
           Book Now
         </button>

@@ -4,7 +4,7 @@ import { Calendar, Clock, CreditCard, UserRound } from "lucide-react";
 const PatientAppointmentCard = (props) => {
   const { doctor, timeSlot, paymentMethod, status } = props;
   const [date, time] = timeSlot.split(" - ");
-
+  // console.log(doctor?.image);
   const statusColor = {
     pending: "bg-yellow-100 text-yellow-700",
     confirmed: "bg-green-100 text-green-700",
@@ -18,8 +18,8 @@ const PatientAppointmentCard = (props) => {
         {/* Doctor Image */}
         <div>
           <img
-            src={doctor.image}
-            alt={doctor.name}
+            src={doctor?.image}
+            alt={doctor?.name}
             className="w-24 h-full object-cover border-4 border-blue-100"
           />
         </div>
@@ -29,11 +29,11 @@ const PatientAppointmentCard = (props) => {
           <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
             <div>
               <h3 className="text-xl font-semibold text-gray-800">
-                {doctor.name}
+                {doctor?.name}
               </h3>
 
               <p className="text-blue-600 font-medium">
-                {doctor.qualification}
+                {doctor?.qualification}
               </p>
             </div>
 

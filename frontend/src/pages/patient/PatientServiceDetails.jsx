@@ -104,7 +104,7 @@ const PatientServiceDetails = () => {
                   <button
                     key={item}
                     onClick={() => setSlot(item)}
-                    className={`border rounded-xl p-3 text-left transition font-medium
+                    className={`border rounded-xl p-3 text-left transition font-medium cursor-pointer
         ${
           slot === item
             ? "bg-blue-600 text-white border-blue-600 shadow-md"
@@ -207,7 +207,7 @@ const PatientServiceDetails = () => {
 
                 <button
                   onClick={handleBookService}
-                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition"
+                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition cursor-pointer"
                 >
                   Confirm Booking
                 </button>

@@ -112,7 +112,7 @@ const AdminLogin = () => {
                 <button
                   type="button"
                   onClick={() => setTogglePassword(!togglePassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   {togglePassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -121,7 +121,7 @@ const AdminLogin = () => {
 
             <button
               type="submit"
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-semibold transition"
+              className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-semibold transition cursor-pointer"
             >
               {isPending ? "Please Wait" : "Login"}
             </button>

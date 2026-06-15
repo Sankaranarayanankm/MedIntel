@@ -36,10 +36,10 @@ const DoctorDashboard = () => {
       return response.data;
     },
   });
-  if (isLoading && loadingDoctor) return null;
+  if (isLoading || loadingDoctor) return null;
   const { name, _id, totalAppointments, totalEarnings, completed, cancelled } =
     doctor;
-
+  console.log("this is from dashboard");
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
@@ -82,7 +82,7 @@ const DoctorDashboard = () => {
 
         <button
           onClick={() => navigate("/doctor/appointments")}
-          className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+          className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition cursor-pointer"
         >
           View All
         </button>
@@ -99,7 +99,7 @@ const DoctorDashboard = () => {
       <div className="flex justify-center mt-10">
         <button
           onClick={() => navigate("/doctor/appointments")}
-          className="px-8 py-3 bg-gray-800 text-white rounded-xl hover:bg-black transition"
+          className="px-8 py-3 bg-gray-800 text-white rounded-xl hover:bg-black transition cursor-pointer"
         >
           Show More Appointments
         </button>
@@ -109,4 +109,3 @@ const DoctorDashboard = () => {
 };
 
 export default DoctorDashboard;
-    

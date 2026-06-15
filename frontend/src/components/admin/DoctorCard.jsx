@@ -96,7 +96,7 @@ const AdminDoctorCard = (props) => {
         <div className="mt-6 pt-4 border-t border-gray-100">
           <button
             onClick={() => props.handleDelete(props._id)}
-            className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 py-3 rounded-xl font-medium transition-all duration-200"
+            className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 py-3 rounded-xl font-medium transition-all duration-200 cursor-pointer"
           >
             <Trash size={18} />
             Remove Doctor

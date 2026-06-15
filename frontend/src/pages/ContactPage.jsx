@@ -82,7 +82,7 @@ const ContactPage = () => {
 
             <button
               onClick={handleSendMessage}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition cursor-pointer"
             >
               Send Message
             </button>

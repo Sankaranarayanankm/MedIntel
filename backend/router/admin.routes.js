@@ -23,20 +23,13 @@ import {
 import { errorMiddleware } from "../middleware/error.middleware.js";
 
 const router = express.Router();
-router.use(protectRoute);
 
-// FOR ADMINS AND DOCTORS
-router.get(
-  "/doctors",
-  roleMiddleware("patient", "admin"),
-  getAllDoctorsController,
-);
-router.get(
-  "/services",
-  roleMiddleware("patient", "admin"),
-  getAllServicesController,
-);
+//* FOR SHOWING IN THE HOMEPAGE,PATIENTS AND FOR ADMINS
+router.get("/doctors", getAllDoctorsController);
+router.get("/services", getAllServicesController);
+
 // FOR ADMINS ALONE
+router.use(protectRoute);
 router.use(roleMiddleware("admin"));
 router.post("/doctors", addDoctorsController);
 

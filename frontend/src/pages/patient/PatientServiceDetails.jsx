@@ -9,10 +9,12 @@ const PatientServiceDetails = () => {
   const [booking, setBooking] = useState("online");
   const [slot, setSlot] = useState("");
   const queryClient = useQueryClient();
+
   const navigate = useNavigate();
   const params = useParams();
   const { serviceId } = params;
   const services = queryClient.getQueryData(["services"]);
+  const user = queryClient.getQueryData(["authUser"]);
   const service = services?.find((item) => item._id === serviceId);
   const { mutate: bookService, isPending } = useMutation({
     mutationFn: async ({ id, data }) => {
@@ -38,6 +40,10 @@ const PatientServiceDetails = () => {
       paymentMethod: booking,
       timeSlot: slot,
     };
+    if (!user) {
+      toast.error("Login to book appointment");
+      return;
+    }
     // console.log(obj);
     bookService({ id: serviceId, data: obj });
   };

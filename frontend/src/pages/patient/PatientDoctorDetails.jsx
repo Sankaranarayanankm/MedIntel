@@ -13,6 +13,8 @@ const PatientDoctorDetails = () => {
   const navigate = useNavigate();
   const params = useParams();
   const doctors = queryClient.getQueryData(["doctors"]);
+  const user = queryClient.getQueryData(["authUser"]);
+  console.log(user, "this is user from doctor appointment");
   const { doctorId } = params;
   const doctor = doctors?.find((item) => item._id === doctorId);
 
@@ -22,8 +24,10 @@ const PatientDoctorDetails = () => {
       paymentMethod,
       timeSlot,
     };
-    console.log(obj, "obj");
-    console.log(id, "id");
+    if (!user) {
+      toast.error("Login to book appointment");
+      return;
+    }
     bookAppointment({ id, data: obj });
   };
   const { mutate: bookAppointment, isPending } = useMutation({

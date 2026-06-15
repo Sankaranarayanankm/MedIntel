@@ -8,17 +8,18 @@ import {
   Clock3,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { data: services, isLoading } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
-      const resposne = await axiosInstance.get("/admin/services");
-      return response.data?.data;
+      const resposne = await axiosInstance.get("admin/services");
+      return resposne.data?.data;
     },
   });
-  console.log(services);
+  // console.log(services);
   if (isLoading) return null;
   return (
     <div>
@@ -42,11 +43,17 @@ const HomePage = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 mt-8">
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+              <button
+                onClick={() => navigate("/patient/doctors")}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+              >
                 Book Appointment
               </button>
 
-              <button className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition">
+              <button
+                onClick={() => navigate("/patient/services")}
+                className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition"
+              >
                 Explore Services
               </button>
             </div>
@@ -146,7 +153,7 @@ const HomePage = () => {
           <div className="flex gap-6 overflow-x-auto scrollbar-hide pb-4">
             {services?.map((service) => (
               <div
-                key={service.id}
+                key={service._id}
                 className="min-w-[300px] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition shrink-0"
               >
                 <img
@@ -162,7 +169,10 @@ const HomePage = () => {
                     {service.about}
                   </p>
 
-                  <button className="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                  <button
+                    onClick={() => navigate(`/patient/services/${service._id}`)}
+                    className="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                  >
                     View Details
                   </button>
                 </div>

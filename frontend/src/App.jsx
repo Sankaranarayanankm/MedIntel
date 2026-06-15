@@ -45,7 +45,6 @@ const App = () => {
   if (isLoading) {
     return null;
   }
-  // console.log(user?.token);
   return (
     <>
       <Toaster />
@@ -59,19 +58,22 @@ const App = () => {
             <Route path="/patient/login" element={<PatientLogin />} />
             <Route path="/patient/signup" element={<PatientSignup />} />
           </Route>
-          <Route element={<ProtectRoute user={user} allowedRoute="patient" />}>
-            <Route path="/patient">
+          <Route path="/patient">
+            <Route path="doctors" element={<PatientDoctors />} />
+            <Route
+              path="doctors/:doctorId"
+              element={<PatientDoctorDetails />}
+            />
+            <Route path="services" element={<PatientServices />} />
+            <Route
+              path="services/:serviceId"
+              element={<PatientServiceDetails />}
+            />
+            <Route
+              element={<ProtectRoute user={user} allowedRoute="patient" />}
+            >
               <Route path="" element={<PatientProfile />} />
-              <Route path="doctors" element={<PatientDoctors />} />
-              <Route
-                path="doctors/:doctorId"
-                element={<PatientDoctorDetails />}
-              />
-              <Route path="services" element={<PatientServices />} />
-              <Route
-                path="services/:serviceId"
-                element={<PatientServiceDetails />}
-              />
+
               <Route path="appointments" element={<PatientAppointments />} />
             </Route>
           </Route>

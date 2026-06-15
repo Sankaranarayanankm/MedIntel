@@ -17,7 +17,7 @@ const AppLayout = ({ user }) => {
     <div>
       <Navbar navbarItems={navbarItems} role={user?.role} />
       <Outlet />
-      <Footer />
+      <Footer role={user?.role} />
     </div>
   );
 };

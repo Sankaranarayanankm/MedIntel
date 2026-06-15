@@ -9,8 +9,10 @@ import {
 } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../utls/axios";
+import { useNavigate } from "react-router-dom";
 
-const Footer = () => {
+const Footer = ({ role = "patient" }) => {
+  const navigate = useNavigate();
   const { data: services, isLoading } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
@@ -18,14 +20,19 @@ const Footer = () => {
       return response.data?.data;
     },
   });
+  const routes = {
+    home: "/",
+    contact: "/contact",
+    doctors: "/patient/doctors",
+    services: "/patient/services",
+  };
   if (isLoading) return null;
 
-  // console.log(services);
   return (
     <footer className="bg-slate-900 text-gray-300 mt-20">
-      <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-        {/* Brand Section */}
-        <div className="space-y-5">
+      <div className="max-w-7xl mx-auto px-6 py-14 flex flex-col lg:flex-row justify-between gap-12">
+        {/* Brand */}
+        <div className="w-full lg:w-1/4 space-y-5">
           <div>
             <h4 className="text-2xl font-bold text-white">MedIntel</h4>
             <p className="text-sm text-blue-400">Healthcare Solutions</p>
@@ -54,50 +61,70 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Quick Links */}
-        <div>
-          <h5 className="text-lg font-semibold text-white mb-5">Quick Links</h5>
+        {/* Middle Section (Links + Services grouped) */}
+        {role == "patient" && (
+          <div className="flex flex-1 justify-between gap-10">
+            {/* Quick Links */}
+            <div className="min-w-[150px]">
+              <h5 className="text-lg font-semibold text-white mb-5">
+                Quick Links
+              </h5>
 
-          <div className="flex flex-col gap-3">
-            {["Home", "Doctors", "Services", "Contact", "Appointments"].map(
-              (item) => (
-                <span
-                  key={item}
-                  className="flex items-center gap-2 cursor-pointer hover:text-white transition"
-                >
-                  <ArrowRight size={16} />
-                  {item}
-                </span>
-              ),
-            )}
-          </div>
-        </div>
+              <div className="flex flex-col gap-3">
+                {["Home", "Doctors", "Services", "Contact"].map((item) => (
+                  <span
+                    onClick={() => {
+                      const path = routes[item.toLocaleLowerCase()];
+                      navigate(path);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    key={item}
+                    className="flex items-center gap-2 cursor-pointer hover:text-white transition"
+                  >
+                    <ArrowRight size={16} />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-        {/* Services */}
-        <div>
-          <h5 className="text-lg font-semibold text-white mb-5">
-            Our Services
-          </h5>
+            {/* Services */}
+            <div className="min-w-[200px]">
+              <h5 className="text-lg font-semibold text-white mb-5">
+                Our Services
+              </h5>
 
-          <div className="flex flex-col gap-3">
-            {services?.slice(0, 4).map((item) => (
-              <span
-                key={item._id}
-                className="flex items-center gap-2 hover:text-white transition cursor-pointer"
+              <div className="flex flex-col gap-3">
+                {services?.slice(0, 4).map((item) => (
+                  <span
+                    onClick={() => {
+                      navigate(`/patient/services/${item._id}`);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    key={item._id}
+                    className="flex items-center gap-2 hover:text-white transition cursor-pointer"
+                  >
+                    <ArrowRight size={16} />
+                    {item.name}
+                  </span>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  navigate("/patient/services");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="mt-4 text-blue-400 hover:text-blue-300 transition"
               >
-                <ArrowRight size={16} />
-                {item.name}
-              </span>
-            ))}
+                View More
+              </button>
+            </div>
           </div>
-
-          <button className="mt-4 text-blue-400 hover:text-blue-300 transition">
-            View More
-          </button>
-        </div>
+        )}
 
         {/* Social */}
-        <div>
+        <div className="w-full lg:w-1/4">
           <h5 className="text-lg font-semibold text-white mb-5">
             Stay Connected
           </h5>
@@ -108,18 +135,18 @@ const Footer = () => {
           </p>
 
           <div className="flex items-center gap-4 text-2xl">
-            <FaFacebook className="cursor-pointer hover:text-white transition" />
-            <FaTwitter className="cursor-pointer hover:text-white transition" />
-            <FaInstagram className="cursor-pointer hover:text-white transition" />
-            <FaLinkedin className="cursor-pointer hover:text-white transition" />
-            <FaYoutube className="cursor-pointer hover:text-white transition" />
+            <FaFacebook />
+            <FaTwitter />
+            <FaInstagram />
+            <FaLinkedin />
+            <FaYoutube />
           </div>
         </div>
       </div>
 
       {/* Bottom */}
       <div className="border-t border-slate-700 py-5 text-center text-sm text-gray-400">
-        <p>© 2026 MedIntel Healthcare. All rights reserved.</p>
+        © 2026 MedIntel Healthcare. All rights reserved.
       </div>
     </footer>
   );

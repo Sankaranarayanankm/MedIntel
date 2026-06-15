@@ -1,5 +1,4 @@
 import React from "react";
-import { DUMMY_SERVICES } from "../DUMMY/data";
 import {
   CalendarDays,
   ShieldCheck,
@@ -12,6 +11,15 @@ import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const resposne = await axiosInstance.get("/admin/services");
+      return response.data?.data;
+    },
+  });
+  console.log(services);
+  if (isLoading) return null;
   return (
     <div>
       {/* Hero Section */}
@@ -136,7 +144,7 @@ const HomePage = () => {
           </div>
 
           <div className="flex gap-6 overflow-x-auto scrollbar-hide pb-4">
-            {DUMMY_SERVICES.map((service) => (
+            {services?.map((service) => (
               <div
                 key={service.id}
                 className="min-w-[300px] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition shrink-0"

@@ -1,6 +1,5 @@
 import { ArrowRight, LocateIcon, Mail, Phone } from "lucide-react";
 import React from "react";
-import { DUMMY_SERVICES } from "../DUMMY/data";
 import {
   FaFacebook,
   FaInstagram,
@@ -8,8 +7,20 @@ import {
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../utls/axios";
 
 const Footer = () => {
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const resposne = await axiosInstance.get("/admin/services");
+      return response.data?.data;
+    },
+  });
+  if (isLoading) return null;
+
+  console.log(services);
   return (
     <footer className="bg-slate-900 text-gray-300 mt-20">
       <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -69,7 +80,7 @@ const Footer = () => {
           </h5>
 
           <div className="flex flex-col gap-3">
-            {DUMMY_SERVICES.slice(0, 4).map((item) => (
+            {services?.slice(0, 4).map((item) => (
               <span
                 key={item.id}
                 className="flex items-center gap-2 hover:text-white transition cursor-pointer"

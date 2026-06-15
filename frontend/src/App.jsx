@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import ProtectRoute from "./components/ProtectRoute";
 import PublicRoute from "./components/PublicRoutes";
+import PatientProfile from "./pages/PatientProfile ";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -60,6 +61,7 @@ const App = () => {
           </Route>
           <Route element={<ProtectRoute user={user} allowedRoute="patient" />}>
             <Route path="/patient">
+              <Route path="" element={<PatientProfile />} />
               <Route path="doctors" element={<PatientDoctors />} />
               <Route
                 path="doctors/:doctorId"

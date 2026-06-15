@@ -13,8 +13,8 @@
 - global error handling
 - migrations
 
-# Front end
-
 # TODO
 
-- add page for edit and viewing patient profile
+## LAST
+
+- double check details pages for appointment and services

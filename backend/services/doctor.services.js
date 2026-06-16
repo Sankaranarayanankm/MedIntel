@@ -41,20 +41,22 @@ export const updateDoctorAppointmentService = async (
 };
 export const getDoctorDetailsService = async (doctorId) => {
   const doctor = await Doctor.findById(doctorId).lean();
-  const doctorAppointments = await Appoinment.find({ doctor: doctorId }).lean();
-
   if (!doctor) {
     throw new CustomError("doctor not found", 404);
   }
-  const totalEarnings = doctorAppointments
-    .filter((appointment) => appointment.status === "completed")
-    .reduce((sum, appointment) => sum + appointment.fee, 0);
-  const completed = doctorAppointments.filter(
-    (appointment) => appointment.status == "completed",
-  ).length;
-  const cancelled = doctorAppointments.filter(
-    (appointment) => appointment.status == "cancelled",
-  ).length;
+  const doctorAppointments = await Appoinment.find({ doctor: doctorId }).lean();
+  let totalEarnings = 0;
+  let completed = 0;
+  let cancelled = 0;
+  for (let appointment of doctorAppointments) {
+    if (appointment.status == "completed") {
+      totalEarnings += appointment.fee;
+      completed++;
+    } else if (appointment.status == "cancelled") {
+      cancelled++;
+    }
+  }
+
   return {
     ...doctor,
     totalEarnings,
@@ -70,7 +72,7 @@ export const editDoctorDetailsService = async (doctorId, data) => {
     });
     data.image = uploadResponse.secure_url;
   }
-  console.log(data.image);
+  // console.log(data.image);
   const doctor = await Doctor.findByIdAndUpdate(
     doctorId,
     { $set: data },

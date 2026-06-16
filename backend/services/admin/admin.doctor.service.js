@@ -6,29 +6,34 @@ import Appoinment from "../../models/appoinments.model.js";
 import Patient from "../../models/patient.model.js";
 
 export const getAllDoctorService = async () => {
-  const doctors = await Doctor.find().lean();
-
-  const updatedDoctors = await Promise.all(
-    doctors.map(async (doc) => {
-      const appoinemnts = await Appoinment.find({ doctor: doc._id });
-      const completedAppoinments = appoinemnts.filter(
-        (appoin) => appoin.status === "completed",
-      ).length;
-      const cancelledAppoinments = appoinemnts.filter(
-        (appoin) => appoin.status === "cancelled" || appoin.adminCancel == true,
-      ).length;
-      const totalAppoinments = appoinemnts.length;
-      let revenue = doc.fee * completedAppoinments;
-
-      return {
-        ...doc,
-        revenue,
-        totalAppoinments,
-        completedAppoinments,
-        cancelledAppoinments,
-      };
-    }),
-  );
+  const [doctors, appoinments] = await Promise.all([
+    Doctor.find().lean(),
+    Appoinment.find().lean(),
+  ]);
+  const updatedDoctors = doctors.map((doc) => {
+    let totalAppoinments = 0;
+    let completedAppoinments = 0;
+    let cancelledAppoinments = 0;
+    let revenue = 0;
+    for (let appoinment of appoinments) {
+      if (appoinment.doctor.toString() !== doc._id.toString()) continue;
+      totalAppoinments++;
+      if (appoinment.status == "completed") {
+        completedAppoinments++;
+        revenue += appoinment.fee;
+      }
+      if (appoinment.adminCancel || appoinment.status == "cancelled") {
+        cancelledAppoinments++;
+      }
+    }
+    return {
+      ...doc,
+      totalAppoinments,
+      completedAppoinments,
+      cancelledAppoinments,
+      revenue,
+    };
+  });
 
   return updatedDoctors;
 };
@@ -98,23 +103,40 @@ export const deleteDoctorService = async (doctorId) => {
 };
 
 export const adminDashboardService = async () => {
-  const totalPatients = await Patient.countDocuments();
-  const totalDoctors = await Doctor.countDocuments();
-  const appoinments = await Appoinment.find().lean();
-  const totalAppoinments = appoinments.length;
-  const totalRevenue = appoinments.reduce((acc, item) => {
-    return item.status === "completed" ? acc + item.fee : acc;
-  }, 0);
+  const [totalPatients, totalDoctors, appoinments] = await Promise.all([
+    Patient.countDocuments(),
+    Doctor.countDocuments(),
+    Appoinment.find().lean(),
+  ]);
+  let totalRevenue = 0;
+  let totalCompletedAppoinments = 0;
+  let totalCancelledAppoinments = 0;
+  for (let appoinment of appoinments) {
+    if (appoinment.status == "completed") {
+      totalRevenue += appoinment.fee;
+      totalCompletedAppoinments++;
+    } else if (appoinment.status == "cancelled") {
+      totalCancelledAppoinments++;
+    }
+  }
+  // const totalPatients = await Patient.countDocuments();
+  // const totalDoctors = await Doctor.countDocuments();
+  // const appoinments = await Appoinment.find().lean();
+  // const totalAppoinments = appoinments.length;
 
-  const totalCancelledAppoinments = appoinments.filter(
-    (appoinment) => appoinment.status === "cancelled",
-  ).length;
-  const totalCompletedAppoinments = appoinments.filter(
-    (appoinment) => appoinment.status === "completed",
-  ).length;
+  // const totalRevenue = appoinments.reduce((acc, item) => {
+  //   return item.status === "completed" ? acc + item.fee : acc;
+  // }, 0);
+
+  // const totalCancelledAppoinments = appoinments.filter(
+  //   (appoinment) => appoinment.status === "cancelled",
+  // ).length;
+  // const totalCompletedAppoinments = appoinments.filter(
+  //   (appoinment) => appoinment.status === "completed",
+  // ).length;
   const dataObj = {
     totalDoctors,
-    totalAppoinments,
+    totalAppoinments: appoinments.length,
     totalRevenue,
     totalCancelledAppoinments,
     totalCompletedAppoinments,

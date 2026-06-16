@@ -48,13 +48,13 @@ const App = () => {
   if (isLoading) {
     return <LoadingScreen />;
   }
-  // console.log(user);
+ 
 
   return (
     <>
       <Toaster />
       <Routes>
-        <Route element={<AppLayout user={user} services={services} />}>
+        <Route element={<AppLayout user={user} />}>
           <Route path="/" element={<HomePage services={services} />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route element={<PublicRoute user={user} />}>

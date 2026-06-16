@@ -56,8 +56,7 @@ const ListDoctor = () => {
     } else {
       updated = doctors?.filter((item) => item.availability === availability);
     }
-    console.log(updated);
-    console.log(availability);
+
     setFilterDoctors(updated);
   };
   if (doctorLoading) return null;

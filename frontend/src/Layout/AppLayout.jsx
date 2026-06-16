@@ -6,7 +6,7 @@ import { ADMIN_NAVBAR, DOCTOR_NAVBAR, PATIENT_NAVBAR } from "../DUMMY/data";
 
 import LoadingScreen from "../components/LoadingScreen";
 
-const AppLayout = ({ user, services }) => {
+const AppLayout = ({ user }) => {
   const navbarItems =
     user?.role == "admin"
       ? ADMIN_NAVBAR
@@ -19,7 +19,7 @@ const AppLayout = ({ user, services }) => {
       <Navbar navbarItems={navbarItems} role={user?.role} />
       <Outlet />
 
-      <Footer role={user?.role} services={services} />
+      <Footer role={user?.role} />
     </div>
   );
 };

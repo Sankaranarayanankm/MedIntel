@@ -101,9 +101,9 @@ export const bookServicesService = async (
     service: serviceId,
     timeSlot,
   });
-  // if (existingService) {
-  //   throw new CustomError("you have already booked service", 400);
-  // }
+  if (existingService) {
+    throw new CustomError("you have already booked service", 400);
+  }
 
   const serviceBooked = await ServiceBooking.create({
     patient,

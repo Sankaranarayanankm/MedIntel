@@ -15,9 +15,8 @@
 
 # TODO
 
-- create a service provider and update everything
-- udpate the existing datas
-
+- update error message while booking appointment or service
+- update or separate logic in backend controllers
 
 
 ## LAST

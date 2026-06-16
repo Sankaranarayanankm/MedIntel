@@ -7,14 +7,16 @@ import {
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../utls/axios";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "./LoadingScreen";
 
-const Footer = ({ role = "patient", services }) => {
+const Footer = ({ role = "patient" }) => {
   const navigate = useNavigate();
-  // console.log(role);
+  const queryClient = useQueryClient();
+  const services = queryClient.getQueryData(["services"]);
+  
   const routes = {
     home: "/",
     contact: "/contact",
